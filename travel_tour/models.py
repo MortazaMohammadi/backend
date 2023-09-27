@@ -27,15 +27,18 @@ class Employee(models.Model):
     
 # money
 class Money(models.Model):
-    money_type = models.CharField(max_length=5)
+    money_type = models.CharField(max_length=20)
     amount = models.IntegerField()
     sell_amount = models.FloatField()
     buy_amount = models.FloatField()
     date = models.DateTimeField(auto_now_add=True)
-    
+    def __str__ (self):
+        return str(self.money_type)
 # Payment type
 class Payment_type(models.Model):
     title = models.CharField(max_length=20)
+    def __str__ (self):
+        return str(self.title)
 
 
 # Payment
@@ -43,7 +46,7 @@ class Payment(models.Model):
     amount = models.FloatField(max_length=10)
     money = models.ForeignKey(Money, on_delete=models.CASCADE)
     payment_type = models.ForeignKey(Payment_type, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField()
     
 
 
@@ -73,12 +76,14 @@ class Location (models.Model):
 class Customer(models.Model):
     name = models.CharField(max_length=50)
     lastname = models.CharField(max_length=50)
+    employee = models.ForeignKey(Employee, null=True, on_delete=models.SET_NULL)
     address = models.CharField(max_length=50)
+    email = models.CharField(max_length=50,default='unknown')
     phone = models.CharField(max_length=50)
     mainstate = models.CharField(max_length=20)
     currentstate = models.CharField(max_length=20)
-    passport = models.IntegerField(null=True)
-    profile = models.ImageField(upload_to='profile/' , blank= True, null=True)
+    passport = models.CharField(max_length=50,null=True)
+    profile = models.ImageField(upload_to='profile/' , blank= True)
     passportImage = models.ImageField(upload_to='document/' , blank= True, null=True)
     cardImage = models.ImageField(upload_to='document/' , blank= True, null=True)
     

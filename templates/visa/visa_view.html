@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.rtl.min.css">
+  <link rel="stylesheet" href="/static/CSS/style.css">
+  <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
+  <title>Exellent</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="top fixed-top p-2 main-bg text-white">
+      <div class="menu-btn">
+        <button class="btn"><i class="fa fa-list text-white" aria-hidden="true" onclick="menubtn()"></i></button>
+      </div>
+      <div class="text-center fs-3">
+        <span class="text-light fw-bold">Excellent</span>
+      </div>
+      <div class="logout">
+        <button class="btn"><i class="fa fa-power-off text-white" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="menubar mt-5 pt-3">
+    <ul class="navbar-nav menu fs-5 fw-bold">
+      <li class="nav-item main-bg"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6"
+            aria-hidden="true"></i>صفحه اصلی</a></li>
+      <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-users pe-3 fs-6" aria-hidden="true"></i>
+          امور دفتر</a></li>
+      <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6" aria-hidden="true"></i>امور
+          ویزا</a></li>
+      <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6" aria-hidden="true"></i>ویزاهای
+          تایید شده</a></li>
+      <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6" aria-hidden="true"></i>نرخ
+          اسعار </a> </li>
+    </ul>
+  </div>
+
+  <div class="body p-5 mt-3">
+  
+    <div class="text-center">
+
+      <div class="detial">
+        <div class="title_bar fw-bold fs-2 sub-bg text-white">
+          لیست ویزاها
+        </div>
+        <div class="search_filter main-bg p-4">
+          <div class="row m-0">
+            <div class="col-lg-3 col-md-3 col-12">
+              <input type="date" name="" class="form-control" id="">
+            </div>
+            <div class="col-lg-3 col-md-3 col-12">
+              <select class="form-select" id="emp" aria-label="Default select example"
+                onchange="handleSelectChange('مقدار')">
+                <option value="1">اجاره دفتر</option>
+                <option value="2">عمان یکساله</option>
+              </select>
+            </div>
+            <div class="col-lg-3 col-md-3 col-12">
+              <input type="number" placeholder="مدت" name="" class="form-control" id="">
+            </div>
+            <div class="col-lg-3 col-md-3 col-12">
+              <button class="btn btn-info sub-bg text-light w-100"><i class="fa fa-search px-2" aria-hidden="true"></i>
+                جستجو</button>
+            </div>
+          </div>
+        </div>
+        <div class="row m-0 mt-4">
+          <div class="col-12  border-bottom border-secondary border-3 p-2">
+            <div class="row m-0">
+              <div class="col-lg-2 col-md-2 col-12 fw-bold">
+                نمایه
+              </div>
+              <div class="col-lg-2 col-md-2 col-12 fw-bold">
+                نام مشتری
+              </div>
+              <div class="col-lg-2 col-md-2 col-12 fw-bold">
+                کشور
+              </div>
+              <div class="col-lg-2 col-md-2 col-12 fw-bold">
+                نوع ویزا
+              </div>
+              <div class="col-lg-2 col-md-2 col-12 fw-bold">
+                برسی
+              </div>
+            </div>
+          </div>
+
+          <div class="row m-0 border-top border secondary">
+            <div class="col-12 p-2">
+              <div class="row m-0">
+                <div class="col-lg-2 col-md-2 col-12 fw-bold">
+                  <a href=""> <img src="/static/img/banner/login.jpg" alt="" width="30" height="30"
+                      style="border-radius: 50%;"> </a>
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 ">
+                  محمد محمدی
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 ">
+                  عمان
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 ">
+                  سیاحتی
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 p-0 btn btn-outline-info" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
+                  برسی
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row m-0 border-top border secondary">
+            <div class="col-12 p-2">
+              <div class="row m-0">
+                <div class="col-lg-2 col-md-2 col-12 fw-bold">
+                  <a href=""> <img src="/static/img/banner/login.jpg" alt="" width="30" height="30"
+                      style="border-radius: 50%;"> </a>
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 ">
+                  محمد محمدی
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 ">
+                  عمان
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 ">
+                  سیاحتی
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 p-0 btn btn-outline-info" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
+                  برسی
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row m-0 border-top border secondary">
+            <div class="col-12 p-2">
+              <div class="row m-0">
+
+                <div class="col-lg-2 col-md-2 col-12 fw-bold">
+                  <a href=""> <img src="/static/img/banner/login.jpg" alt="" width="30" height="30"
+                      style="border-radius: 50%;"> </a>
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 ">
+                  محمد محمدی
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 ">
+                  عمان
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 ">
+                  سیاحتی
+                </div>
+                <div class="col-lg-2 col-md-2 col-12 p-0 btn btn-outline-info" data-bs-toggle="modal"
+                  data-bs-target="#exampleModal">
+                  برسی
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa fa-desktop px-2 text-danger" aria-hidden="true"></i>مشخصات ویزا</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body ">
+                    <div class="col-12">
+                      <div class="detial text-start p-2">
+                        <h4 class="text-danger fw-bold">مشخصات مشتری</h4>
+                      <div class="row m-0 fs-5">
+                        <div class="col-lg-6 col-md-6 col-12 d-flex justify-content-center ">
+                            <div class="row m-0 text-start">
+                              <div class="col-5 fw-bold text-dark">نام :</div>
+                              <div class="col-7 ">محمد علی زاده</div>
+                              
+                              <div class="col-5 fw-bold text-dark">معرف :</div>
+                              <div class="col-7 ">محمد محمدی</div>
+                              
+                              <div class="col-5 fw-bold text-dark">ایمیل :</div>
+                              <div class="col-7 fs-6">mohammadi@gmail.com</div>
+                              
+                              <div class="col-5 fw-bold text-dark">شماره تماس :</div>
+                              <div class="col-7 fs-6">0093782800275</div>
+                              
+                              <div class="col-5 fw-bold text-dark">تاریخ ثبت :</div>
+                              <div class="col-7 fs-6">2023-02-05</div>
+                            </div>
+                        </div>
+                       
+                        <div class="col-lg-6 col-md-6 col-12 d-flex justify-content-center">
+                          <div class="row m-0">
+
+                           
+
+                            <div class="col-5 fw-bold text-dark">نمبر پاسپورت :</div>
+                            <div class="col-7 ">P01238237</div>
+                            
+                            <div class="col-5 fw-bold text-dark">نوعیت ویزا :</div>
+                            <div class="col-7 ">سیاحتی</div>
+                            
+                            <div class="col-5 fw-bold text-dark">کشور :</div>
+                            <div class="col-7 ">قطر</div>
+                            
+                            <div class="col-5 fw-bold text-dark">مدت :</div>
+                            <div class="col-7 ">3 ماهه</div>
+                            
+                            
+                          </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="row m-0 mt-4">
+                          <div class="col-4 d-flex justify-content-center">
+                            <img src="/static/img/banner/view-6.jpg" alt="" width="300" height="600" class="card">
+                          </div>
+                          <div class="col-8 d-flex justify-content-center">
+                            <img src="/static/img/banner/view-6.jpg" width="100%" height="" class="card" alt="">
+                          </div>
+                          <div class="col-12 d-flex justify-content-center mt-4">
+                            <img src="/static/img/banner/view-6.jpg" width="100%" height="" class="card" alt="">
+                          </div>
+                          
+                        </div>
+                      </div>
+                     
+
+                        <div class="col-lg-4 col-md-4 col-12 d-flex justify-content-center"></div>
+                        <div class="col-lg-8 col-md-8 col-12 d-flex justify-content-center"></div>
+                        <div class="col-12 d-flex justify-content-center"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            
+          </div>
+      </div>
+    </div>
+  </div>
+    <script src="static/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/Bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

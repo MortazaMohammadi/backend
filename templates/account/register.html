@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% include 'shared/_HeaderReferences.html' %}
+    {% block header_ref %}{% endblock %}
+</head>
+<body>
+<div class="register-banner">
+    <div class="card-register w-100 shadow p-3 pt-5">
+        <h2 class="fs-3 fw-bold head-color mt-2 mb-5">
+            ایجاد حساب کاربری
+        </h2>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row m-0 text-start">
+                <div class="col-lg-3 col-md-4 col-12">
+                    <span class="d-block text-white fw-bold">
+                        <i class="head-color fa fa-user px-1" aria-hidden="true"></i>
+                        تصویر نمایه
+                    </span>
+                    <div class="mt-2">
+                        <img id="imagePreview-2" src="/static/img/avatar-bg.png" style="height: 200px; width: 200px;"
+                            alt="profile image">
+
+                    </div>
+                    <div class="text-center" style="width: 200px;">
+                        <label for="file-input-2" class="custom-button w-100 p-2 text-white nav-link fw-bold">
+                            <i class="fa-solid fa-image light-blue-cl me-2 head-color" aria-hidden="true"></i>اضافه
+                            تصویر
+                        </label>
+                        <input name="image" type="file" id="file-input-2" class="d-none" accept="image/*"
+                            onchange="previewImage(event,'imagePreview-2')" class="form-control mt-2" required required>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-8 col-12 pt-2">
+                    <div class="row m-o">
+
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <h4 class="fs-6 fw-bold text-light"><i class="fa fa-user px-2 head-color"
+                                    aria-hidden="true"></i>نام</h4>
+                            <input name="first_name" type="text" class="form-control" required>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <h4 class="fs-6 fw-bold text-light"><i class="fa fa-users px-2 head-color"
+                                    aria-hidden="true"></i>تخلص</h4>
+                            <input name="last_name" type="text" class="form-control" required>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <h4 class="fs-6 fw-bold text-light"><i class="fa fa-user px-2 head-color"
+                                    aria-hidden="true"></i>نام کاربری</h4>
+                            <input name="user_name" type="text" class="form-control" required>
+                            <p class="text-danger">
+                                {{username}}
+                            </p>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <h4 class="fs-6 fw-bold text-light"><i class="fa fa-envelope px-2 head-color"
+                                    aria-hidden="true"></i>ایمیل</h4>
+                            <input name="email" type="email" class="form-control" required>
+                            <p class="text-danger">
+                                {{email}}
+                            </p>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <h4 class="fs-6 fw-bold text-light"><i class="fa fa-lock px-2 head-color"
+                                    aria-hidden="true"></i>رمز عبور</h4>
+                            <input name="password" type="password" class="form-control" required>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <h4 class="fs-6 fw-bold text-light"><i class="fa fa-lock-open px-2 head-color"
+                                    aria-hidden="true"></i>تکرار رمز عبور</h4>
+                            <input name="repassword" type="password" class="form-control" required>
+                            <p class="text-danger">
+                                {{password}}
+                            </p>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <h4 class="fs-6 fw-bold text-light"><i class="fa fa-location-dot px-2 head-color"
+                            aria-hidden="true"></i>ولایت</h4>
+                            <select name="province" class="form-select" aria-label="Default select example">
+                                
+                                {% for i in location %}
+                                <option class="" value="{{ i.id }}">{{ i.province}}</option>
+                                {% endfor %}
+                            </select>
+                    
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <h4 class="fs-6 fw-bold text-light"><i class="fa fa-location-pin px-2 head-color"
+                                    aria-hidden="true"></i>منطقه</h4>
+                            <input name="sublocation" type="text" class="form-control" required>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <h4 class="fs-6 fw-bold text-light"><i class="fa fa-location-pin px-2 head-color"
+                                    aria-hidden="true"></i>شماره تلفن</h4>
+                            <input name="phone" type="number"  class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="-col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-outline-info text-white fw-bold" style="width: 200px;">راجستر</button>
+                    </div>
+                    <div class="col-12 text-center mt-1">
+                        <a href="#" class="nav-link text-white mb-2 fw-bold">ورود به حساب</a>
+                    </div>
+                </div>
+               
+                <!-- 
+            <div class="col-12 my-2">
+                <h4 class="fs-6 fw-bold text-light"><i class="fa fa-lock px-2 head-color" aria-hidden="true"></i>پسورد</h4>
+                <input type="password" placeholder="رمز عبور" class="form-control">
+            </div>
+            <div class="col-12 text-center my-3">
+                <button class="btn btn-outline-info w-50">ورود</button>
+            </div>
+            <div class="col-12 text-center">
+                <a href="#" class="nav-link text-white">ایجاد حساب جدید</a>
+            </div> -->
+            </div>
+        </form>
+    </div>
+</div>
+{% include 'shared/_FooterReferences.html' %}
+{% block footer_ref %}{% endblock %}
+</body>
+</html>

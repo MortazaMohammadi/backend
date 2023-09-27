@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
+    <title>Exellent</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="top fixed-top p-2 main-bg text-white">
+            <div class="menu-btn">
+                <button class="btn"><i class="fa fa-list text-white" aria-hidden="true"
+                        onclick="menubtn()"></i></button>
+            </div>
+            <div class="text-center fs-3">
+                <span class="text-light fw-bold">Excellent</span>
+            </div>
+            <div class="logout">
+                <button class="btn"><i class="fa fa-power-off text-white" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="menubar mt-5 pt-3">
+        <ul class="navbar-nav menu fs-5 fw-bold">
+            <li class="nav-item main-bg"><a href="dashboard.html" class="nav-link"><i class="fa fa-home pe-3 fs-6" aria-hidden="true"></i>صفحه اصلی</a></li>
+            <li class="nav-item"><a href="employee_registeration.html" class="nav-link"><i class="fa fa-users pe-3 fs-6" aria-hidden="true"></i> راجستر کارمند</a></li>
+            <li class="nav-item"><a href="customer_registeration.html" class="nav-link"><i class="fa fa-home pe-3 fs-6" aria-hidden="true"></i>راجستر مشتری</a></li>
+            <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6" aria-hidden="true"></i></a></li>
+            <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6" aria-hidden="true"></i>نرخ اسعار </a> </li>
+           
+        </ul>
+    </div>
+    <div class="body p-5 mt-3">
+        <div class="text-center">
+
+            <div class="detial">
+                <div class="title_bar fw-bold fs-2 sub-bg text-white">
+                    مصارف 
+                </div>
+                <form action="">
+                    <div class="row m-0 text-start">
+                        <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i> مقدار پول</p>
+                            <input type="number" class="form-control">
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>نوعیت پول</p>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>افغانی</option>
+                                <option value="1">دالر امریکایی</option>
+                                <option value="2">یورو</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>نوعیت مصرف</p>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>اجاره دفتر</option>
+                                <option value="1">پول برق</option>
+                                <option value="2">پول انترنت</option>
+                                <option value="3">پول غذا</option>
+                                <option value="4">مصرف اضافی</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-calendar text-danger px-2" aria-hidden="true"></i> تاریخ</p>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="m-4"></p>
+                            <button class="btn btn-info mt-3 w-100 fw-bold">ذخیره</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="list sub-bg">
+                <div class="title_bar fw-bold fs-2 mt-5 text-light">
+                    لیست مصارف 
+                </div>
+                  <table class="table table-light">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">مقدار پول</th>
+                        <th scope="col">نوعیت پول</th>
+                        <th scope="col">نوعیت مصارف</th>
+                        <th scope="col">تاریخ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>2000</td>
+                        <td>افغانی</td>
+                        <td>کرایه دفتر</td>
+                        <td>2023-2-5</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>2000</td>
+                        <td>افغانی</td>
+                        <td>کرایه دفتر</td>
+                        <td>2023-2-5</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>2000</td>
+                        <td>افغانی</td>
+                        <td>کرایه دفتر</td>
+                        <td>2023-2-5</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+
+</html>
