@@ -9,7 +9,7 @@
     <div class="title_bar fw-bold fs-2 sub-bg text-white">
         راجستر مشتری
     </div>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div id="reg" class="row m-0 shadow mt-5 text-start p-2  p-3 py-5 ">
            
@@ -92,7 +92,7 @@
                                 aria-hidden="true"></i>اضافه
                             تصویر
                         </label>
-                        <input name="image" name = 'profile_img' type="file" id="file-input-2" class="d-none" accept="image/*"
+                        <input name="profile_img" type="file" id="file-input-2" class="d-none" accept="image/*"
                             onchange="previewImage(event,'imagePreview-2')" class="form-control mt-2" required
                             required>
                     </div>
@@ -112,7 +112,7 @@
                                 aria-hidden="true"></i>اضافه
                             تصویر
                         </label>
-                        <input name="image" name = 'card_img' type="file" id="file-input-1" class="d-none" accept="image/*"
+                        <input name="card_img" type="file" id="file-input-1" class="d-none" accept="image/*"
                             onchange="previewImage(event,'imagePreview-1')" class="form-control mt-2" required
                             required>
                     </div>
@@ -132,7 +132,7 @@
                                 aria-hidden="true"></i>اضافه
                             تصویر
                         </label>
-                        <input name="image" name = 'passport_img' type="file" id="file-input-3" class="d-none" accept="image/*"
+                        <input name="passport_img" type="file" id="file-input-3" class="d-none" accept="image/*"
                             onchange="previewImage(event,'imagePreview-3')" class="form-control mt-2" required
                             required>
                     </div>

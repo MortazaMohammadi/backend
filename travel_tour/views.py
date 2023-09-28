@@ -94,9 +94,9 @@ def customerRegister(request):
         mainstate = request.POST.get('mainstate_txt')
         currentstate = request.POST.get('currentstate_txt')
         passport = request.POST.get('passport_txt')
-        profile_image = request.FILES.get('profile_imag')
-        card_image = request.FILES.get('card_img')
-        passport_image = request.FILES.get('passport_img')
+        profile_image = request.FILES['profile_img']
+        card_image = request.FILES['card_img']
+        passport_image = request.FILES['passport_img']
 
         employee = mod.Employee.objects.get(id=employee_id)  # Fetch the employee object using the provided ID
 
@@ -116,7 +116,7 @@ def customerRegister(request):
         )
         customer.save()  # Save the customer object to the database
 
-        return redirect('success')  # Redirect to a success page
+        return redirect('/customerRegister')  # Redirect to a success page
 
     employees = mod.Employee.objects.all()  # Fetch all employees to populate the employee field in the form
 
