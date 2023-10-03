@@ -1,0 +1,86 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="body p-5 mt-3">
+  <div class="text-center">
+
+    <div class="detial">
+      <div class="title_bar fw-bold fs-2 sub-bg text-white">
+        لیست ویزاها
+      </div>
+      <div class="search_filter main-bg p-4">
+        <form action="" method="get">
+          {% csrf_token %}
+          <div class="row m-0">
+            <div class="col-lg-5 col-md-3 col-12">
+              <input type="text" placeholder="نمبر پاسپورت" name="passport_txt" class="form-control" id="">
+            </div>
+            <div class="col-lg-3 col-md-3 col-12">
+              <button type="submit" class="btn btn-info sub-bg text-light w-100"><i class="fa fa-search px-2" aria-hidden="true"></i>
+                جستجو</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="row m-0 mt-4">
+        <div class="col-12  border-bottom border-secondary border-3 p-2">
+          <div class="row m-0">
+            <div class="col-lg-2 col-md-2 col-12 fw-bold">
+              نمایه
+            </div>
+            <div class="col-lg-2 col-md-2 col-12 fw-bold">
+              نام مشتری
+            </div>
+            <div class="col-lg-2 col-md-2 col-12 fw-bold">
+              کشور
+            </div>
+            <div class="col-lg-2 col-md-2 col-12 fw-bold">
+              نوع ویزا
+            </div>
+            <div class="col-lg-2 col-md-2 col-12 fw-bold">
+              برسی
+            </div>
+          </div>
+        </div>
+
+        <div class="row m-0 border-top border secondary">
+          {% for item in visalisting %}
+          <div class="col-12 p-2">
+            
+            <div class="row m-0">
+              <div class="col-lg-2 col-md-2 col-12 fw-bold">
+                <a href=""> <img src="{{item.customer.profile.url}}" alt="" width="30" height="30"
+                    style="border-radius: 50%;"> </a>
+              </div>
+              <div class="col-lg-2 col-md-2 col-12 ">
+                {{item.customer.name}} {{item.customer.lastname}}
+              </div>
+
+              <div class="col-lg-2 col-md-2 col-12 ">
+                {{item.visaType.country}}
+              </div>
+              
+              <div class="col-lg-2 col-md-2 col-12 ">
+                {{item.visaType.type}}
+              </div>
+
+              <a href="visaView/{{item.id}}" class="col-lg-2 col-md-2 col-12 p-0 btn btn-outline-info">
+                برسی
+              </a>
+
+            </div>
+            
+          </div>
+          {% endfor %}
+        </div>
+      
+      </div>
+  
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          
+        </div>
+    </div>
+  </div>
+  {% endblock %}

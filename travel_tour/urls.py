@@ -5,7 +5,7 @@ from .views import *
 urlpatterns =[
 
     path('', loginPage, name='loginPage'),
-    path('employeeRegister', employeeRegister, name='employeeRegisteration'),
+     path('logout' , logout_user),
     path('addPayment', addPayment, name='addPayment'),
     path('paymentList', paymentList, name='paymentList'),
     path('paymentUpdate<int:pay_id>/', paymentUpdate, name='paymentUpdate'),
@@ -14,7 +14,14 @@ urlpatterns =[
     path('visaRegister',visaRegister, name= 'visaRegister'),
     path('visaList',visaList,name='visaList'),
     path('visaView/<int:visa_id>/',visaView,name='visaView'),
-    path('visaUpdate',visaUpdate,name='visaUpdate'),
+    path('visaUpdate/<int:visa_id>/',visaUpdate,name='visaUpdate'),
+    path('bill', bill ,name = 'bill'),
+    path('billprint/<int:bill_id>/',billPrint,name = 'billPrint'),
+    path('deleteBill/<int:bill_id>/',deleteBill,name = 'deleteBill'),
+    path('sendBill/<int:bill_id>/',sendBill,name = 'sendBill'),
+    path('updateBill/<int:bill_id>/',updateBill,name = 'updateBill'),
+    path('customerUpdate/<int:customer_id>/',customerUpdate,name = 'customerUpdate')
+    
     
     # path('', home_page),
 

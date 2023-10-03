@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Employee, Money, Payment_type, Payment, Manager, Boss, Location, Customer, VisaType, Visa, VisaRecivedDoc, visaPayment
+from .models import CustomUser, Employee, Money, OurEmail, Payment_type, Payment, Manager, Boss, Location, Customer, VisaType, Visa, VisaRecivedDoc, visaPayment
 
 admin.site.register(CustomUser)
 admin.site.register(Employee)
@@ -14,3 +14,4 @@ admin.site.register(VisaType)
 admin.site.register(Visa)
 admin.site.register(VisaRecivedDoc)
 admin.site.register(visaPayment)
+admin.site.register(OurEmail)

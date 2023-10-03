@@ -86,27 +86,61 @@ class Customer(models.Model):
     profile = models.ImageField(upload_to='profile/' , blank= True)
     passportImage = models.ImageField(upload_to='document/' , blank= True, null=True)
     cardImage = models.ImageField(upload_to='document/' , blank= True, null=True)
-    
+    def __str__ (self):
+        return str(self.name)+ ' ' + str(self.lastname)
+
+class OurEmail(models.Model):
+     email = models.CharField(max_length=60)
+     def __str__ (self):
+        return str(self.email)
+
+
 class VisaType(models.Model):
     country = models.CharField(max_length=20)
     duration = models.IntegerField()
     type = models.CharField(max_length=20)
     price = models.FloatField()
+    money = models.ForeignKey(Money, on_delete=models.CASCADE)
+    def __str__ (self):
+        return str(self.country)+ ' ' + str(self.duration)
+
+class Bill(models.Model):
+    name = models.CharField(max_length=50)
+    reciveddoc = models.CharField(max_length=50)
+    visatype = models.ForeignKey(VisaType, on_delete=models.CASCADE)
+    date = models.DateField(auto_now = True)
+    price = models.FloatField()
+    payed = models.FloatField()
+    money = models.ForeignKey(Money, on_delete=models.CASCADE)
+    duration = models.IntegerField(null=True)
+    isdone = models.BooleanField(default=False)
+    def __str__(self):
+        return str(self.name)
+
 class Visa(models.Model):
     visaType = models.ForeignKey(VisaType, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     isprocess = models.BooleanField(default=False)
+    emailby = models.ForeignKey(OurEmail, on_delete=models.CASCADE)
+    visapdf = models.FileField(upload_to='VisaPdfFiles/', null= True)
+    isproccessed = models.BooleanField(default=False)
     isapproved = models.BooleanField(default=False)
-    ispayed = models.BooleanField(default=False)
-    isdone = models.BooleanField(default=False)
+    saveddate = models.DateField(auto_now=True)
+    price = models.FloatField()
+    money = models.ForeignKey(Money, on_delete=models.CASCADE)
+   
     
 class VisaRecivedDoc(models.Model):
     visa = models.ForeignKey(Visa, on_delete=models.CASCADE)
     Document = models.CharField(max_length=60, null = True)
+    def __str__ (self):
+        return str(self.Document)
 class visaPayment(models.Model):
     visa = models.ForeignKey(Visa,on_delete=models.CASCADE)
     payed = models.FloatField(null = True)
-    Blockaddress = models.CharField(max_length=50, null = False)
-    Blockimage = models.ImageField(upload_to='document/' , blank= True, null=True)
+    blockAddress = models.CharField(max_length=50, null = True)
+    blockImage = models.ImageField(upload_to='BlockImage/' , blank= True, null=True)
+    def __str__ (self):
+        return str(self.payed)+ ' ' + str(self.blockAddress)
     
 # Create your models here.
