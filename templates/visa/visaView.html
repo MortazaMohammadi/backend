@@ -96,10 +96,12 @@
                         <tr>
                             <td class=" fw-bold">  حالت :</td>
                             <td>
-                                {% if visa.isapproved %}
+                                {% if visa.iscomplate %}
                                     تکمیل شد
-                                {% elif visa.isproccessed %}
-                                    ثبت شده
+                                {% elif visa.isapproved %}
+                                    تایید شده
+                                {% elif visa.isrejected %}
+                                    رد شده
                                 {% else %}
                                     زیر کار
                                 {% endif %}

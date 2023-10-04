@@ -123,12 +123,19 @@ class Visa(models.Model):
     isprocess = models.BooleanField(default=False)
     emailby = models.ForeignKey(OurEmail, on_delete=models.CASCADE)
     visapdf = models.FileField(upload_to='VisaPdfFiles/', null= True)
-    isproccessed = models.BooleanField(default=False)
     isapproved = models.BooleanField(default=False)
+    isrejected = models.BooleanField(default=False)
+    iscomplate = models.BooleanField(default=False)
     saveddate = models.DateField(auto_now=True)
     price = models.FloatField()
     money = models.ForeignKey(Money, on_delete=models.CASCADE)
-   
+
+
+class registerPayed(models.Model):
+    visa = models.ForeignKey(Visa ,null=True, on_delete=models.SET_NULL)
+    payed = models.FloatField(null=True)
+    money = models.ForeignKey(Money, null=True, on_delete=models.CASCADE)
+    
     
 class VisaRecivedDoc(models.Model):
     visa = models.ForeignKey(Visa, on_delete=models.CASCADE)

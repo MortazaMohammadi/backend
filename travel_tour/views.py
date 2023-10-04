@@ -353,7 +353,7 @@ def visaUpdate(request,visa_id):
         visa.save()
         reciveddoc.save()
         visaPayment.save()
-        return redirect('/visaRegister')        
+        return redirect('/visaList')        
     context['visa'] = mod.Visa.objects.get(id = visa_id)
     context['reciveddoc'] = mod.VisaRecivedDoc.objects.get(visa = visa)
     context['visaPayment'] = mod.visaPayment.objects.get(visa = visa)
@@ -369,3 +369,67 @@ def customerUpdate(request,customer_id):
     context = {}
     context['page'] = 'آپدیت ویزا'
     return render(request,'visa/customerUpdate.html',context)
+
+
+def registerPayment(request,visa_id):
+    context = {}
+    registerPayment = None
+    context['page'] = "تمدید حالت"
+    visa = mod.Visa.objects.get(id = visa_id)
+    try:
+        registerPayment = mod.registerPayed.objects.get(visa = visa)
+    except:
+        pass
+    
+    if registerPayment:
+        context['registerPayment'] = registerPayment
+    context['visa'] = visa
+    money = mod.Money.objects.all()
+    context['money'] = money
+    if request.method == 'POST':
+        payed = request.POST.get('payed_txt')
+        remoney = request.POST.get('money_txt')
+        isapproved = request.POST.get('isapproved_txt')
+        isrejected = request.POST.get('isrejected_txt')
+        iscomplate = request.POST.get('iscomplate_txt') 
+        
+        if registerPayment:
+            registerPayment.visa = visa
+            registerPayment.payed = payed
+            registerPayment.money = mod.Money.objects.get(id = remoney)
+            registerPayment.save()
+        else:
+            newregisterPayment = mod.registerPayed(
+                visa = visa,
+                payed = payed,
+                money = mod.Money.objects.get(id = remoney)
+            )
+            newregisterPayment.save()
+        if isapproved == 'on':
+            visa.isapproved = True
+            visa.isrejected = False
+        else:
+            visa.isapproved = False
+            
+        if isrejected == 'on':
+            visa.isrejected = True
+            visa.isapproved = False
+        else:
+            visa.isrejected = False
+        if iscomplate == 'on':
+            visa.iscomplate = True
+        else:
+            visa.iscomplate = False
+        visa.save()
+        
+        return redirect('/visaList')
+    else:
+        if visa.isapproved ==True:
+            context['approve'] = "checked"
+        if visa.isrejected ==True:
+            context['reject'] = "checked"
+        if visa.iscomplate ==True:
+            context['complate'] = "checked"
+        
+            
+    return render(request,'visa/registerpayment.html',context)
