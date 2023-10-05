@@ -17,6 +17,11 @@
                     <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> مقدار پرداخت به سفارت</p>
                     <input type="text" name="payed_txt" class="form-control" value="{{registerPayment.payed}}">
                 </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">   
+                    <p class="text-dark m-1"><i class="fa text-danger px-2 fa-pen" aria-hidden="true"></i> سند تاییدی ویزا</p>
+                    <input type="file" name="visapdf_file" class="form-control" value="">
+                   
+                </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                     <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i> نوعیت پول</p>
                     <select class="form-select" id="" name="money_txt" aria-label="Default select example">
@@ -28,6 +33,16 @@
                         {% endfor %}
                     </select>
                 </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                    <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>سند ویزا</p>
+                    
+                    {% if visa.visapdf %}
+                    <a href="{{visa.visapdf.url}}" class="nav-link text-danger px-3 fs-5 "  target="_blank">ثبت گردیده است</a>
+                    {% else %}
+                    <p class="fs-5 text-info px-3"> ویزا ثبت نگردیده </p>
+                    {% endif %}
+                </div>
+                
                 <div class="col-lg-4 col-md-4 col-sm-12 p-2 fs-5">
                         <input type="checkbox" class="btn-check " id="btncheck1" name="isapproved_txt" autocomplete="off" {{approve}}>
                         <label class="btn btn-outline-warning text-dark w-100 fw-bold fs-5" for="btncheck1">
@@ -35,7 +50,7 @@
                         </label>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 p-2 fs-5">
-                    <input type="checkbox" class="btn-check " id="btncheck2" name="isrejected_txt" autocomplete="off" {{regject}}>
+                    <input type="checkbox" class="btn-check " id="btncheck2" name="isrejected_txt" autocomplete="off" {{reject}}>
                     <label class="btn btn-outline-danger text-dark fs-5 fw-bold w-100" for="btncheck2"> ویزا رد گردید</label>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 p-2 fs-5">

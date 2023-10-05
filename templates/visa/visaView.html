@@ -132,7 +132,13 @@
                                 </div>
                             </div>
                             {% else %}
-                            <p class="text-info">وجود ندارد</p>
+                            {% if visa.isrejected == True %}
+                                <p class="text-danger"> ویزا رد شده است</p>
+                            {% else %}
+                                <p class="text-info">وجود ندارد</p>
+                            {% endif %{% if visa.visapdf %}
+                            <a href="{{visa.visapdf.url}}" class="nav-link text-danger">سند ویزا</a>
+                            {% endif %}}
                             {% endif %}
                             </td>
                         </tr>

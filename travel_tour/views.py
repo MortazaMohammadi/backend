@@ -399,12 +399,17 @@ def registerPayment(request,visa_id):
             registerPayment.money = mod.Money.objects.get(id = remoney)
             registerPayment.save()
         else:
-            newregisterPayment = mod.registerPayed(
+            try:
+                mod.Money.objects.get(id = remoney)
+                newregisterPayment = mod.registerPayed(
                 visa = visa,
                 payed = payed,
-                money = mod.Money.objects.get(id = remoney)
-            )
-            newregisterPayment.save()
+                money = mod.Money.objects.get(id = remoney) if remoney != 0 else None
+                )
+                newregisterPayment.save()
+            except:
+                pass
+            
         if isapproved == 'on':
             visa.isapproved = True
             visa.isrejected = False
@@ -412,12 +417,36 @@ def registerPayment(request,visa_id):
             visa.isapproved = False
             
         if isrejected == 'on':
+            visa.visapdf.delete()
             visa.isrejected = True
             visa.isapproved = False
         else:
             visa.isrejected = False
         if iscomplate == 'on':
-            visa.iscomplate = True
+            if visa.isapproved:
+                visapdf = None
+                try:
+                    visapdf = request.FILES['visapdf_file']
+                except:
+                    pass
+                if visapdf != None:
+                    if visa.visapdf == None:
+                        visa.visapdf = visapdf
+                        visa.iscomplate = True
+                    else:
+                        visa.visapdf.delete()
+                        visa.visapdf = visapdf
+                        visa.iscomplate = True
+                
+                else:
+                    if visa.visapdf != None:
+                        visa.iscomplate = True
+                    else:
+                        visa.iscomplate = False
+            elif visa.isrejected:
+                visa.iscomplate = True
+            else:
+                pass
         else:
             visa.iscomplate = False
         visa.save()

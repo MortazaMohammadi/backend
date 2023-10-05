@@ -86,13 +86,35 @@
                 </a>
               </div>
               <div class="col-lg-2 col-md-2 col-12 px-2">
-                <button type="button" class="w-100 p-0 btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{ item.id }}">
+                <a href="registerPayment/{{item.id}}" class="w-100 p-0 btn btn-dark">
+                  آدامه کار
+                </a>
+                <!-- <button type="button" class="w-100 p-0 btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{ item.id }}">
                   تکمیل
-                </button>
+                </button> -->
               </div>
               <div class="col-lg-1 col-md-1 col-12 d-flex justify-content-center">
+                {% if item.iscomplate == True %}
+                {% if item.isrejected == True %}
+                <div class="bg-danger" style="width: 25px; height:25px;">
+                </div>
+                {% elif item.isapproved == True %}
                 <div class="bg-warning" style="width: 25px; height:25px;">
                 </div>
+                
+                {%endif%}
+                <div class="bg-primary" style="width: 25px; height:25px;">
+                </div>
+                {% elif item.isapproved == True %}
+                <div class="bg-warning" style="width: 25px; height:25px;">
+                </div>
+                {% elif item.isrejected == True %}
+                <div class="bg-danger" style="width: 25px; height:25px;">
+                </div>
+                {%else%}
+                <div class="bg-secondary" style="width: 25px; height:25px;">
+                </div>
+                {% endif %}
               </div>
             </div>
           </div>
