@@ -24,18 +24,14 @@
           }
         }
     </style>
-      <script>
-        function printContent() {
-          window.print();
-        }
-      </script>
+     
     {% endblock %}
 </head>
 <body>
 {% block content %}
 <div class="w-100 p-1">
    <div class="row m-0 py-3 px-2 border border-dark border-1 no-print" id="print-button">
-        <button onclick="printContent()">Print</button>
+        <button onclick="window.print()">Print</button>
    </div>
    <div class="row m-0 p-3 shadow print-content">
     <div class="col-12 fs-6 text-secondary text-end position-relative">
@@ -118,6 +114,7 @@
    </div>
    <div class="mt-4 border-top"></div>
 </div>
+
 {% include 'shared/_FooterReferences.html' %}
 {% endblock %}
 </body>

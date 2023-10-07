@@ -459,6 +459,40 @@ def registerPayment(request,visa_id):
             context['reject'] = "checked"
         if visa.iscomplate ==True:
             context['complate'] = "checked"
-        
-            
     return render(request,'visa/registerpayment.html',context)
+
+def visaStatistic(request):
+    context = {}
+    context['page'] = 'آمار ویزا ها'
+    if request.method == 'GET':
+         Fvtype = request.GET.get('vtype_txt')
+         if Fvtype:
+           if Fvtype == '0':
+               context['records'] = mod.Visa.objects.all()
+           else:
+                 ptype = mod.Payment_type.objects.get(id=Fvtype)  # Use get() instead of filter()
+                 context['records'] = mod.Payment.objects.filter(payment_type=ptype.id)
+         else:
+              context['records'] = mod.Payment.objects.order_by('-id') 
+    visas = mod.Visa.objects.all()
+    myrecord = []
+    for i in visas:
+        visa = i
+        ofpay = None
+        cupay = mod.visaPayment.objects.get(visa = i)
+        try:
+            ofpay = mod.registerPayed.objects.get(visa = i)
+        except:
+            ofpay = {'payed': 'n/a'}
+        myrecord.append(visa)
+        myrecord.append(ofpay)
+        myrecord.append(cupay)
+        
+       
+    for visa in visas:
+        pass
+    context ['a'] = {'alli':{'jan':1}}
+    
+            
+    context['listpay'] = ' text-warning sub-bg '
+    return render(request,'visa/visastatistic.html',context)

@@ -128,7 +128,7 @@
                                     <a href="{{ visa.visapdf.url }}" download class="nav-link text-danger">دانلود</a> 
                                 </div>
                                 <div class="col">
-                                    <a href="{{ visa.visapdf.url }}" onclick="printPdf('{{ visa.visapdf.url }}'); return false;" class="nav-link text-danger">پرنت</a>
+                                    <a href="#" onclick="printPdf('{{ visa.visapdf.url }}'); return false;" class="nav-link text-danger">پرنت</a>
                                 </div>
                             </div>
                             {% else %}
@@ -136,9 +136,9 @@
                                 <p class="text-danger"> ویزا رد شده است</p>
                             {% else %}
                                 <p class="text-info">وجود ندارد</p>
-                            {% endif %{% if visa.visapdf %}
+                            {% endif %}{% if visa.visapdf %}
                             <a href="{{visa.visapdf.url}}" class="nav-link text-danger">سند ویزا</a>
-                            {% endif %}}
+                            {% endif %}
                             {% endif %}
                             </td>
                         </tr>

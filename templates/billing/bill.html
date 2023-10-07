@@ -77,12 +77,11 @@
                     <th scope="row">{{ items.id }}</th>
                     <td>{{ items.name }}</td>
                     <td>{{ items.visatype.country }} {{items.visatype.type}}</td>
-                    <td><a href="billprint/{{items.id}}" class="btn btn-info w-100">یرنت</a></td>
+                    <td><a href="billprint/{{items.id}}" onclick="printPdf('billprint/{{items.id}}'); return false;" class="btn btn-info w-100">یرنت</a></td>
                     <td><a href="updateBill/{{items.id}}" class="btn btn-primary w-100">ویرایش</a></td>
                     <td> <a href="deleteBill/{{items.id}}" class="btn btn-success w-100">ارسال</a></td>
                     <td> <a href="deleteBill/{{items.id}}" class="btn btn-danger w-100">حذف</a></td>
                   </tr>   
-
                  {% endfor %}
                 </tbody>
                 

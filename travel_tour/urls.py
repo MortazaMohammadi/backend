@@ -21,7 +21,8 @@ urlpatterns =[
     path('sendBill/<int:bill_id>/',sendBill,name = 'sendBill'),
     path('updateBill/<int:bill_id>/',updateBill,name = 'updateBill'),
     path('customerUpdate/<int:customer_id>/',customerUpdate,name = 'customerUpdate'),
-    path('registerPayment/<int:visa_id>/',registerPayment,name = 'customerUpdate')
+    path('registerPayment/<int:visa_id>/',registerPayment,name = 'customerUpdate'),
+    path('visaStatistic', visaStatistic,name = 'visaStatistic'),
     
     
     # path('', home_page),
