@@ -7,47 +7,20 @@
     <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="/static/CSS/style.css">
     <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
-    <title>Exellent</title>
+    <title>راجستر کارمند</title>
 </head>
 
 <body>
-    <div class="container">
-        <div class="top fixed-top p-2 main-bg text-white">
-            <div class="menu-btn">
-                <button class="btn"><i class="fa fa-list text-white" aria-hidden="true"
-                        onclick="menubtn()"></i></button>
-            </div>
-            <div class="text-center fs-3">
-                <span class="text-light fw-bold">Excellent</span>
-            </div>
-            <div class="logout">
-                <button class="btn"><i class="fa fa-power-off text-white" aria-hidden="true"></i></button>
-            </div>
-        </div>
-    </div>
-    <div class="menubar mt-5 pt-3">
-        <ul class="navbar-nav menu fs-5 fw-bold">
-            <li class="nav-item main-bg"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6"
-                        aria-hidden="true"></i>صفحه اصلی</a></li>
-            <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-users pe-3 fs-6" aria-hidden="true"></i>
-                    امور دفتر</a></li>
-            <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6" aria-hidden="true"></i>امور
-                    ویزا</a></li>
-            <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6"
-                        aria-hidden="true"></i>ویزاهای تایید شده</a></li>
-            <li class="nav-item"><a href="" class="nav-link"><i class="fa fa-home pe-3 fs-6" aria-hidden="true"></i>نرخ
-                    اسعار </a> </li>
-
-        </ul>
-    </div>
-    <div class="body p-5 mt-3">
+    
+    <div class="shadow-lg border border-1 border-info  p-5 m-2 bg-secondary">
         <div class="text-center">
 
             <div class="detial">
                 <div class="title_bar fw-bold fs-2 sub-bg text-white">
                     راجستر کاربر
                 </div>
-                <form action="">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <div id="reg" class="row m-0 shadow mt-5 text-start p-2 bg-white-1">
                         <div class="col-lg-4 col-md-4 col-12">
 
@@ -62,7 +35,7 @@
                                         aria-hidden="true"></i>اضافه
                                     تصویر
                                 </label>
-                                <input name="image" type="file" id="file-input-2" class="d-none" accept="image/*"
+                                <input type="file" id="file-input-2" name= 'profile_img' class="d-none" accept="image/*"
                                     onchange="previewImage(event,'imagePreview-2')" class="form-control mt-2" required
                                     required>
                             </div>
@@ -74,30 +47,60 @@
                                     <p class="text-dark m-1"><i class="fa fa-user-circle text-danger px-2"
                                             aria-hidden="true"></i>
                                         نام</p>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="name_txt" class="form-control">
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                                     <p class="text-dark m-1"><i class="fa fa-user text-danger px-2"
                                             aria-hidden="true"></i>
                                         تخلص</p>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="lname_txt" class="form-control">
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                                     <p class="text-dark m-1">
                                         <i class="fa fa-user-plus text-danger px-2" aria-hidden="true"></i>
                                         </i>کارمند
                                     </p>
-                                    <select class="form-select" id="emp" aria-label="Default select example"
-                                        onchange="handleSelectChange('مقدار')">
-                                        <option value="1" selected> فیصدی</option>
-                                        <option value="2">قراردادی</option>
+                                    <select class="form-select" id="emp" name="type_txt" aria-label="Default select example">
+                                        <option value="Boss" selected> ریس</option>
+                                        <option value="Employee">کارمند</option>
+                                        <option value="Manager">مدیر</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                                     <p class="text-dark m-1"><i class="fa fa-location-dot text-danger px-2"
                                             aria-hidden="true"></i>
                                         آدرس</p>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="address_txt" class="form-control">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                                    <p class="text-dark m-1"><i class="fa fa-envelope text-danger px-2"
+                                            aria-hidden="true"></i>
+                                        ایمیل</p>
+                                    <input type="text" name="email_txt" class="form-control">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                                    <p class="text-dark m-1"><i class="fa fa-user text-danger px-2"
+                                            aria-hidden="true"></i>
+                                        نام کاربری</p>
+                                    <input type="text" name="username_txt" class="form-control">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                                    <p class="text-dark m-1"><i class="fa fa-phone text-danger px-2"
+                                            aria-hidden="true"></i>
+                                        شماره تماس</p>
+                                    <input type="text" name="phone_txt" class="form-control">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                                    <p class="text-dark m-1"><i class="fa fa-lock text-danger px-2"
+                                            aria-hidden="true"></i>
+                                        پسورد</p>
+                                    <input type="password" name="password1_txt" class="form-control">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                                    <p class="text-dark m-1"><i class="fa fa-lock-open text-danger px-2"
+                                            aria-hidden="true"></i>
+                                        تایید پسورد</p>
+                                    <input type="password" name="password2_txt" class="form-control">
                                 </div>
                                 <div class="col-12">
                                     <div class="row m-0 d-flex justify-content-end">
@@ -105,6 +108,9 @@
                                         <div class="col-lg-6 col-md-6 col-12 p-2 ">
                                             <button class="btn btn-light sub-bg w-100">ذخیره</button>
                                         </div>
+                                        <span class="fs-5 text-danger">
+                                    {{password_error}}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

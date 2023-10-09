@@ -54,7 +54,7 @@ class Payment(models.Model):
 class Manager (models.Model):
     admin = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     phone = models.CharField(max_length=50)
-    registration_date = models.DateField(auto_now_add=True)
+    registration_date = models.DateField(auto_now=True)
     is_active = models.BooleanField(default=True)
     address = models.CharField(max_length=50)
     

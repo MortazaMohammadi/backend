@@ -8,7 +8,7 @@
   <div class="text-center">
     <div class="detial">
       <div class="title_bar fw-bold fs-2 sub-bg text-white">
-          آمار مالی ویزا
+          لیست مالی ویزا
       </div>
       <div class="search_filter main-bg p-4">
         <form action="" name="listSearchform" method="get">
@@ -18,7 +18,7 @@
             <div class="col-lg-3 col-md-3 col-12">
               <select class="form-select" name="vtype_txt"  id="emp" aria-label="Default select example">
                 <option value="0">همه</option>
-                {% for i in visaType %}
+                {% for i in vtype %}
                 <option value="{{i.id}}">{{i.country}} {{i.type}}</option>
                 {% endfor %}
               </select>
@@ -62,64 +62,36 @@
         </div>
 
         <div class="row m-0 border-top border secondary" style="max-height: 500px; overflow-y:scroll">
-          {% for item in revisa %}
+          {% for item in records %}
           <div class="col-12 p-2 border-bottom border-secondary">
-            
-            <div class="row m-0">
+            <div class="row m-0 text-center">
               <div class="col-lg-1 col-md-1 col-12 fw-bold">
-                <a href=""> <img src="{{item.visa.customer.profile.url}}" alt="" width="30" height="30"
+                <a href=""> <img src="{{item.visa_customer.profile.url}}" alt="" width="30" height="30"
                     style="border-radius: 50%;"> </a>
               </div>
               <div class="col-lg-2 col-md-2 col-12 ">
-                {{ item.visa.customer.name }} {{item.visa.customer.lastname}}
+                {{ item.visa_customer.name }} {{item.visa_customer.lastname}}
               </div>
 
               <div class="col-lg-2 col-md-2 col-12 ">
-                {{item.visa.visaType.country}} {{item.visa.visaType.type}}
+                {{item.visa_type.country}} {{item.visa_type.type}}
               </div>
               
               <div class="col-lg-2 col-md-2 col-12 ">
-                {{item.visa.price}}
+                {{item.visa_price}}
               </div>
-
-              <div class="col-lg-1 col-md-1 col-12 px-2">
-                {{a.alli.jan}}
+              
+              <div class="col-lg-1 col-md-1 col-12 ">
+                {{item.cupay}}
               </div>
-              <div class="col-lg-1 col-md-1 col-12 px-2">
-                <a href="visaUpdate/{{item.id}}" class="w-100 p-0 btn btn-warning">
-                  ویرایش
-                </a>
+              <div class="col-lg-1 col-md-1 col-12 ">
+                {{item.ofpay}}
               </div>
-              <div class="col-lg-2 col-md-2 col-12 px-2">
-                <a href="registerPayment/{{item.id}}" class="w-100 p-0 btn btn-dark">
-                  آدامه کار
-                </a>
-                <!-- <button type="button" class="w-100 p-0 btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal-{{ item.id }}">
-                  تکمیل
-                </button> -->
+              <div class="col-lg-1 col-md-1 col-12 ">
+                {{item.mafad}}
               </div>
-              <div class="col-lg-1 col-md-1 col-12 d-flex justify-content-center">
-                {% if item.iscomplate == True %}
-                {% if item.isrejected == True %}
-                <div class="bg-danger" style="width: 25px; height:25px;">
-                </div>
-                {% elif item.isapproved == True %}
-                <div class="bg-warning" style="width: 25px; height:25px;">
-                </div>
-                
-                {%endif%}
-                <div class="bg-primary" style="width: 25px; height:25px;">
-                </div>
-                {% elif item.isapproved == True %}
-                <div class="bg-warning" style="width: 25px; height:25px;">
-                </div>
-                {% elif item.isrejected == True %}
-                <div class="bg-danger" style="width: 25px; height:25px;">
-                </div>
-                {%else%}
-                <div class="bg-secondary" style="width: 25px; height:25px;">
-                </div>
-                {% endif %}
+              <div class="col-lg-1 col-md-1 col-12 ">
+                {{item.remain}}
               </div>
             </div>
           </div>
@@ -150,7 +122,7 @@
     </div>
     <div class="detial mt-5">
       <div class="title_bar fw-bold fs-2 sub-bg text-white">
-        آمار مصارف
+        آمار مالی ویزا
       </div>
      
       <div class="search_filter p-4" style="background-color: aquamarine;">
@@ -158,11 +130,11 @@
            
             <div class="col-9 mt-2">
               <p class="text-dark m-1 fw-bold"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>فیصدی
-                مصارف</p>
+                کلی</p>
             </div>
             <div class="col-3 mt-2">
               <p class="text-dark m-1 fw-bold"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>مجموعه
-                مصارف</p>
+                کلی</p>
               </div>
             <div class="col-9 mt-2">
               <div class=' bg-light  mt-2 text-center' style="width: 100%; border-radius:10px">
@@ -170,27 +142,55 @@
               </div>
             </div>
             <div class="col-3 mt-2">
-              <div class='text-dark py-1 mt-2 text-center border border-warning' style="width: 100%; border-radius:10px">{{total_amount}} افغانی</div>
+              <div class='text-dark py-1 mt-2 text-center border border-warning' style="width: 100%; border-radius:10px">{{total_price}} (دالر)</div>
             </div>
           </div>
         </form>
       </div>
       <div class="row m-0 bg-light mt-3 ">
-        <div class="col-3 sub-bg text-light p-2 fw-bold" style="border: 1px solid grey;">نوعیت مصارف</div>
-        <div class="col-7 sub-bg text-light p-2 fw-bold" style="border: 1px solid grey;">فیصدی مصارف</div>
-        <div class="col-2 sub-bg text-light p-2 fw-bold" style="border: 1px solid grey;">مجموعه مصارف</div>
-      {% for item in eachptype %}
-      <div class="col-3 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{ item.0 }}</div>
-      <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
-        <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
-          <div class="m-0 bg-danger" style="width: {{item.2}}%; border-raduis:5px;">{{item.2}}</div>
+        <div class="col-3 sub-bg text-light p-2 fw-bold" style="border: 1px solid grey;">عنوان</div>
+        <div class="col-7 sub-bg text-light p-2 fw-bold" style="border: 1px solid grey;">فیصدی</div>
+        <div class="col-2 sub-bg text-light p-2 fw-bold" style="border: 1px solid grey;">مقدار</div>
+     
+        <div class="row m-0 p-0">
+            <div class="col-3 text-dark p-2 fw-bold" style="border: 1px solid grey;">مجموعه پرداختی برای سفارت</div>
+
+            <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
+              <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
+                <div class="m-0 bg-success" style="width: {{percentage_ofpay}}%; border-raduis:5px;">{{percentage_ofpay}}</div>
+              </div>
+            </div>
+            <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{total_ofpay}}</div>
         </div>
-      </div>
-      <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{item.1}}</div>
-      {% endfor %}
+
+        <div class="row m-0 p-0">
+            <div class="col-3 text-dark p-2 fw-bold" style="border: 1px solid grey;">مجموعه باقیات مشتری</div>
+
+            <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
+              <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
+                <div class="m-0 bg-danger" style="width: {{percentage_cupay}}%; border-raduis:5px;">{{percentage_cupay}}</div>
+              </div>
+            </div>
+            <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{total_cupay}}</div>
+        </div>
+
+        <div class="row m-0 p-0">
+            <div class="col-3 text-dark p-2 fw-bold" style="border: 1px solid grey;">مجموعه مفاد تا به حال</div>
+
+            <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
+              <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
+                <div class="m-0 bg-info" style="width: {{percentage_mafad}}%; border-raduis:5px;">{{percentage_mafad}}%</div>
+              </div>
+            </div>
+            <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{mafad}}</div>
+        </div>
+
+     
+      
       </div>
     </div>
   </div>
 </div>
+
 
 {% endblock content %}

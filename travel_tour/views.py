@@ -464,35 +464,155 @@ def registerPayment(request,visa_id):
 def visaStatistic(request):
     context = {}
     context['page'] = 'آمار ویزا ها'
+    total_price = 0
+    total_ofpay = 0
+    total_cupay = 0 
     if request.method == 'GET':
          Fvtype = request.GET.get('vtype_txt')
          if Fvtype:
            if Fvtype == '0':
-               context['records'] = mod.Visa.objects.all()
+               visas = mod.Visa.objects.all()
+               context['records'] = visaacountingList(visas)
+               for i in context['records']:
+                   total_price += i['visa_price']
+                   total_cupay +=i['cupay']
+                   total_ofpay +=i['ofpay']
+              
+               context['total_price'] = total_price
+               context['total_ofpay'] = total_ofpay
+               context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
+               context['total_cupay'] = total_price - total_cupay
+               context['percentage_cupay'] = round(100 - (total_cupay * 100 /total_price),2)
+               context['mafad'] = total_cupay - total_ofpay
+               context['percentage_mafad'] = round(context['mafad'] * 100 / total_price,2)
            else:
-                 ptype = mod.Payment_type.objects.get(id=Fvtype)  # Use get() instead of filter()
-                 context['records'] = mod.Payment.objects.filter(payment_type=ptype.id)
+                 visas = mod.Visa.objects.filter(visaType = Fvtype)
+                 context['records'] = visaacountingList(visas)
+                 for i in context['records']:
+                   total_price += i['visa_price']
+                   total_cupay +=i['cupay']
+                   total_ofpay +=i['ofpay']
+                 
+                 context['total_price'] = total_price
+                 context['total_ofpay'] = total_ofpay
+                 context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
+                 context['total_cupay'] = total_price - total_cupay
+                 context['percentage_cupay'] = round(100 - (total_cupay * 100 /total_price),2)
+                 context['mafad'] = total_cupay - total_ofpay
+                 context['percentage_mafad'] = round(context['mafad'] * 100 / total_price,2)
          else:
-              context['records'] = mod.Payment.objects.order_by('-id') 
-    visas = mod.Visa.objects.all()
-    myrecord = []
-    for i in visas:
-        visa = i
-        ofpay = None
-        cupay = mod.visaPayment.objects.get(visa = i)
-        try:
-            ofpay = mod.registerPayed.objects.get(visa = i)
-        except:
-            ofpay = {'payed': 'n/a'}
-        myrecord.append(visa)
-        myrecord.append(ofpay)
-        myrecord.append(cupay)
-        
-       
-    for visa in visas:
-        pass
-    context ['a'] = {'alli':{'jan':1}}
-    
-            
-    context['listpay'] = ' text-warning sub-bg '
+              context['records'] = visaacountingList(mod.Visa.objects.all())
+              for i in context['records']:
+                   total_price += i['visa_price']
+                   total_cupay +=i['cupay']
+                   total_ofpay +=i['ofpay']
+
+              context['total_price'] = total_price
+              context['total_ofpay'] = total_ofpay
+              context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
+              context['total_cupay'] = total_price - total_cupay
+              context['percentage_cupay'] = round(100 - (total_cupay * 100 /total_price),2)
+              context['mafad'] = total_cupay - total_ofpay
+              context['percentage_mafad'] = round(context['mafad'] * 100 / total_price,2)
+    context['vtype'] = mod.VisaType.objects.all()
+    context['visaacounting'] = ' text-warning sub-bg '
     return render(request,'visa/visastatistic.html',context)
+
+
+def mafad(price,ofpay,cupay):
+    if ofpay != 0.0:
+        return float(price) - float(cupay) - float(ofpay)
+    else:
+        return 'پرداخت نشده'
+
+    
+def visaacountingList(visas):
+    records = []
+    for visa in visas:
+        record = {}
+
+        # Retrieve visa payment
+        cupay = mod.visaPayment.objects.get(visa=visa)
+
+        # Retrieve optional payment
+        try:
+            ofpay = mod.registerPayed.objects.get(visa=visa)
+        except mod.registerPayed.DoesNotExist:
+            ofpay = None
+
+        # Assign values to the record dictionary
+        record['visa_id'] = visa.id
+        record['visa_customer'] = visa.customer
+        record['visa_type'] = visa.visaType
+        record['visa_price'] = visa.price
+        record['cupay'] = cupay.payed
+
+
+        if ofpay:
+            record['ofpay'] = ofpay.payed
+
+        else:
+            record['ofpay'] = 0.0
+           
+        record['mafad'] = mafad(visa.price, record['ofpay'] , cupay.payed)
+        record['remain'] = visa.price - cupay.payed
+        
+        records.append(record) 
+    return records
+
+
+def employeeRegister(request): 
+    context = {}
+    if request.method == 'POST':
+        name = request.POST.get('name_txt')
+        lname = request.POST.get('lname_txt')
+        userType = request.POST.get('type_txt')
+        if 'profile_img' in request.FILES:
+            profileImage = request.FILES['profile_img']
+        else:
+            profileImage = None
+        phone = request.POST.get('phone_txt')
+        email = request.POST.get('email_txt')
+        username = request.POST.get('username_txt')
+        password = request.POST.get('password1_txt')
+        repassword = request.POST.get('password2_txt')
+        if password == repassword:
+            if mod.CustomUser.objects.filter(email=email).exists():
+                context['email_error'] = 'email is already exists'
+                print('email is already exists')
+                return render(request, 'account/employee_registeration.html', context)
+            else:
+                username = username.lower()
+                user = mod.CustomUser.objects.create_user(
+                    username=username, email=email, password=password)
+                user.first_name = name
+                user.last_name = lname
+                user.profile_image = profileImage
+                user.user_type = userType
+                user.save()
+                if userType == 'Boss':
+                    Boss_obj = mod.Boss(
+                        admin=user,
+                        phone=phone,
+                    )
+                    Boss_obj.save()
+                    return redirect('/')
+                elif userType == 'Employee':
+                    Employee_obj = mod.Employee(
+                        admin=user,
+                        phone=phone
+                    )
+                    Employee_obj.save()
+                elif userType == 'Manager':
+                    Manager_obj = mod.Manager(
+                        admin=user,
+                        phone=phone,
+                    )
+                    Manager_obj.save()
+                return redirect('/')
+        else:
+            context['password_error'] = 'Password is not match'
+            print('password mismatch')
+            return render(request, 'account/employee_registeration.html', context)
+    context['page'] = 'راجستر کارمند'
+    return render (request, 'account/employee_registeration.html')
