@@ -12,7 +12,6 @@ from travel_tour import models as mod
 from django.db.models import Sum
 
 
-
 # Login user_account view
 def loginPage(request):
     context = {}
@@ -99,7 +98,6 @@ def customerRegister(request):
     if request.method == 'POST':
         name = request.POST.get('name_txt')
         lastname = request.POST.get('lastname_txt')
-        employee_id = request.POST.get('employee_txt')
         email = request.POST.get('email_txt')
         phone = request.POST.get('phone_txt')
         address = request.POST.get('address_txt')
@@ -109,12 +107,11 @@ def customerRegister(request):
         profile_image = request.FILES['profile_img']
         card_image = request.FILES['card_img']
         passport_image = request.FILES['passport_img']
-        employee = mod.Employee.objects.get(id=employee_id)  # Fetch the employee object using the provided ID
+         # Fetch the employee object using the provided ID
 
         customer = mod.Customer(
             name=name,
             lastname=lastname,
-            employee=employee,
             email=email,
             phone=phone,
             address=address,
@@ -129,9 +126,9 @@ def customerRegister(request):
 
         return redirect('/customerRegister')  # Redirect to a success page
 
-    employees = mod.Employee.objects.all()  # Fetch all employees to populate the employee field in the form
 
-    return render(request, 'visa/customerRegister.html', {'employees': employees,'page': 'راجستر مشتری','cusregister':' text-warning sub-bg '})
+
+    return render(request, 'visa/customerRegister.html', {'page': 'راجستر مشتری','cusregister':' text-warning sub-bg '})
 
 
 # visa registeration page
@@ -140,6 +137,7 @@ def visaRegister(request):
     if request.method == 'POST':
         visaType = request.POST.get('visaType_txt')
         customer = request.POST.get('customer_txt')
+        employee_id = request.POST.get('employee_txt')
         recivedDoc = request.POST.get('recivedDoc_txt')  # Assuming you have a file input field with name 'recived_doc'
         blockAddress = request.POST.get('blockAddress_txt')
         blockImage = request.FILES.get('block_img')  # Assuming you have a file input field with name 'block_image'
@@ -152,10 +150,11 @@ def visaRegister(request):
         dbvisatype = mod.VisaType.objects.get(id= visaType)
         dbemailBy = mod.OurEmail.objects.get(id = emailBy)
         dbmoney = mod.Money.objects.get(id = money)
-        
+        employee = mod.Employee.objects.get(id=employee_id) 
         visa = mod.Visa(
             visaType = dbvisatype,
             customer = dbcustomer,
+            employee = employee,
             emailby = dbemailBy,
             money = dbmoney,
             price = price
@@ -173,7 +172,9 @@ def visaRegister(request):
         visa.save()
         reciveddoc.save()
         visaPayment.save()
-        return redirect('/visaRegister')        
+        return redirect('/visaRegister')   
+    employees = mod.Employee.objects.all()    
+    context['employees'] = employees  
     context['money'] = mod.Money.objects.all()
     context['emailby'] = mod.OurEmail.objects.all()
     context['customers'] = mod.Customer.objects.all().reverse()
@@ -385,14 +386,18 @@ def registerPayment(request,visa_id):
         context['registerPayment'] = registerPayment
     context['visa'] = visa
     money = mod.Money.objects.all()
+    cuspay = mod.visaPayment.objects.get(visa = visa_id)
+    context['cupay'] = cuspay.payed
     context['money'] = money
     if request.method == 'POST':
         payed = request.POST.get('payed_txt')
+        cupayed = request.POST.get('cupayed_txt')
         remoney = request.POST.get('money_txt')
         isapproved = request.POST.get('isapproved_txt')
         isrejected = request.POST.get('isrejected_txt')
         iscomplate = request.POST.get('iscomplate_txt') 
-        
+        cuspay.payed = cupayed
+        cuspay.save()
         if registerPayment:
             registerPayment.visa = visa
             registerPayment.payed = payed
@@ -478,13 +483,16 @@ def visaStatistic(request):
                    total_cupay +=i['cupay']
                    total_ofpay +=i['ofpay']
               
-               context['total_price'] = total_price
                context['total_ofpay'] = total_ofpay
+               context['total_cupay_pay'] = total_cupay
+               context['percentage_cupay_pay'] = round(context['total_cupay_pay'] * 100 / total_price,2)
+               context['total_price'] = total_price
                context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
                context['total_cupay'] = total_price - total_cupay
-               context['percentage_cupay'] = round(100 - (total_cupay * 100 /total_price),2)
+               context['percentage_cupay'] = round(context['total_cupay'] * 100 /total_price,2)
                context['mafad'] = total_cupay - total_ofpay
-               context['percentage_mafad'] = round(context['mafad'] * 100 / total_price,2)
+               context['mafad_min'] = 'text-white bg-danger' if round(context['mafad'] * 100 / total_price,2) < 0 else 'bg-warning'
+               context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
            else:
                  visas = mod.Visa.objects.filter(visaType = Fvtype)
                  context['records'] = visaacountingList(visas)
@@ -493,13 +501,16 @@ def visaStatistic(request):
                    total_cupay +=i['cupay']
                    total_ofpay +=i['ofpay']
                  
-                 context['total_price'] = total_price
                  context['total_ofpay'] = total_ofpay
+                 context['total_cupay_pay'] = total_cupay
+                 context['percentage_cupay_pay'] = round(context['total_cupay_pay'] * 100 / total_price,2)
+                 context['total_price'] = total_price
                  context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
                  context['total_cupay'] = total_price - total_cupay
-                 context['percentage_cupay'] = round(100 - (total_cupay * 100 /total_price),2)
+                 context['percentage_cupay'] = round(context['total_cupay'] * 100 /total_price,2)
                  context['mafad'] = total_cupay - total_ofpay
-                 context['percentage_mafad'] = round(context['mafad'] * 100 / total_price,2)
+                 context['mafad_min'] = 'text-white bg-danger' if round(context['mafad'] * 100 / total_price,2) < 0 else 'bg-warning'
+                 context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
          else:
               context['records'] = visaacountingList(mod.Visa.objects.all())
               for i in context['records']:
@@ -507,24 +518,28 @@ def visaStatistic(request):
                    total_cupay +=i['cupay']
                    total_ofpay +=i['ofpay']
 
-              context['total_price'] = total_price
               context['total_ofpay'] = total_ofpay
+              context['total_cupay_pay'] = total_cupay
+              context['percentage_cupay_pay'] = round(context['total_cupay_pay'] * 100 / total_price,2)
+              context['total_price'] = total_price
               context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
               context['total_cupay'] = total_price - total_cupay
-              context['percentage_cupay'] = round(100 - (total_cupay * 100 /total_price),2)
+              context['percentage_cupay'] = round(context['total_cupay'] * 100 /total_price,2)
               context['mafad'] = total_cupay - total_ofpay
-              context['percentage_mafad'] = round(context['mafad'] * 100 / total_price,2)
+              context['mafad_min'] = 'text-white bg-danger' if round(context['mafad'] * 100 / total_price,2) < 0 else 'bg-warning'
+              context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
     context['vtype'] = mod.VisaType.objects.all()
-    context['visaacounting'] = ' text-warning sub-bg '
+    context['visastatistic'] = ' text-warning sub-bg '
     return render(request,'visa/visastatistic.html',context)
 
 
-def mafad(price,ofpay,cupay):
-    if ofpay != 0.0:
-        return float(price) - float(cupay) - float(ofpay)
+def mafad(price,ofpay,cupay,visa_id):
+    visatype = mod.VisaType.objects.get(visa = visa_id)
+    if cupay > visatype.price:
+        return cupay - visatype.price
     else:
-        return 'پرداخت نشده'
-
+        return cupay - ofpay
+    
     
 def visaacountingList(visas):
     records = []
@@ -554,7 +569,7 @@ def visaacountingList(visas):
         else:
             record['ofpay'] = 0.0
            
-        record['mafad'] = mafad(visa.price, record['ofpay'] , cupay.payed)
+        record['mafad'] = mafad(visa.price, record['ofpay'] , cupay.payed,visa.id)
         record['remain'] = visa.price - cupay.payed
         
         records.append(record) 

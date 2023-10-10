@@ -36,6 +36,17 @@
                             <input type="text" name="recivedDoc_txt" class="form-control">
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1">
+                                <i class="fa fa-user-plus text-danger px-2" aria-hidden="true"></i>
+                                </i>معرف
+                            </p>
+                            <select class="form-select" name="employee_txt" id="emp" aria-label="Default select example">
+                                {% for item in employees %}
+                                    <option value="{{item.id}}"> {{item.admin}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa fa-paper-plane text-danger px-2" aria-hidden="true"></i> آدرس بلاک</p>
                             <input type="text" name="blockAddress_txt" class="form-control">
                         </div>

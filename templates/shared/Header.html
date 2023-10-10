@@ -9,21 +9,34 @@
             <span class="text-light fw-bold">Excellent</span>
         </div>
         <div class="logout">
+            {% if user.profile_image %}
+            <img src="{{ user.profile_image.url }}" style="width: 35px; height:35px; border-radius: 50%;" alt="">
+            {%endif%}
             <button class="btn"><a href="/logout"><i class="fa fa-power-off text-white" aria-hidden="true"></i></a></button>
         </div>
     </div>
 </div>
 <div class="menubar mt-5 pt-3 ">
     <ul class="navbar-nav menu fs-5 fw-bold main-bg">
+        {% if user.user_type == 'Employee' %}
+        <li class="nav-item {{cusregister}}"><a href="/customerRegister" class="nav-link"><i class="fa fa-user pe-3 fs-6" aria-hidden="true"></i>راجستر مشتری</a></li>
+        <li class="nav-item {{visaregister}}"><a href="/visaRegister" class="nav-link"><i class="fa fa-id-card pe-3 fs-6" aria-hidden="true"></i> راجستر ویزا</a></li>
+        <li class="nav-item {{visaList}}"><a href="/visaList" class="nav-link"><i class="fa fa-list pe-3 fs-6" aria-hidden="true"></i> لیست ویزا</a></li>
+        <li class="nav-item {{visastatistic}}"><a href="/visaStatistic" class="nav-link"><i class="fa-brands fa-drupal pe-3 fs-6" aria-hidden="true"></i> آمار مالی ویزا</a></li>
+        {% elif user.user_type == 'Manager' %}
         <li class="nav-item {{bill}}"><a href="/bill" class="nav-link"><i class="fa fa-pencil pe-3" aria-hidden="true"></i> بیل </a></li>
-       
+        <li class="nav-item {{addpay}}"><a href="/addPayment" class="nav-link"><i class="fa fa-pencil pe-3" aria-hidden="true"></i>مصارف دفتر</a></li>
+        <li class="nav-item {{listpay}}"><a href="/paymentList" class="nav-link"><i class="fa fa-list pe-3 fs-6 " aria-hidden="true"></i> لیست مصارف دفتر</a></li>
+        {% else %}
+        <li class="nav-item {{bill}}"><a href="/bill" class="nav-link"><i class="fa fa-pencil pe-3" aria-hidden="true"></i> بیل </a></li>
         <li class="nav-item {{addpay}}"><a href="/addPayment" class="nav-link"><i class="fa fa-pencil pe-3" aria-hidden="true"></i>مصارف دفتر</a></li>
         <li class="nav-item {{listpay}}"><a href="/paymentList" class="nav-link"><i class="fa fa-list pe-3 fs-6 " aria-hidden="true"></i> لیست مصارف دفتر</a></li>
         <li class="nav-item {{cusregister}}"><a href="/customerRegister" class="nav-link"><i class="fa fa-user pe-3 fs-6" aria-hidden="true"></i>راجستر مشتری</a></li>
         <li class="nav-item {{visaregister}}"><a href="/visaRegister" class="nav-link"><i class="fa fa-id-card pe-3 fs-6" aria-hidden="true"></i> راجستر ویزا</a></li>
         <li class="nav-item {{visaList}}"><a href="/visaList" class="nav-link"><i class="fa fa-list pe-3 fs-6" aria-hidden="true"></i> لیست ویزا</a></li>
         <li class="nav-item {{visastatistic}}"><a href="/visaStatistic" class="nav-link"><i class="fa-brands fa-drupal pe-3 fs-6" aria-hidden="true"></i> آمار مالی ویزا</a></li>
-        <li class="nav-item {{registration}}"><a href="/employeeRegister" class="nav-link"><i class="fa fa-users pe-3 fs-6" aria-hidden="true"></i> راجستر کارمند</a></li>
 
+        <li class="nav-item {{registration}}"><a href="/employeeRegister" class="nav-link"><i class="fa fa-users pe-3 fs-6" aria-hidden="true"></i> راجستر کارمند</a></li>
+        {% endif %}
     </ul>
 </div>

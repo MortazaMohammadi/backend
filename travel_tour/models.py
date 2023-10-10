@@ -76,7 +76,6 @@ class Location (models.Model):
 class Customer(models.Model):
     name = models.CharField(max_length=50)
     lastname = models.CharField(max_length=50)
-    employee = models.ForeignKey(Employee, null=True, on_delete=models.SET_NULL)
     address = models.CharField(max_length=50)
     email = models.CharField(max_length=50,default='unknown')
     phone = models.CharField(max_length=50)
@@ -121,6 +120,7 @@ class Visa(models.Model):
     visaType = models.ForeignKey(VisaType, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     isprocess = models.BooleanField(default=False)
+    employee = models.ForeignKey(Employee, null=True, on_delete=models.SET_NULL)
     emailby = models.ForeignKey(OurEmail, on_delete=models.CASCADE)
     visapdf = models.FileField(upload_to='VisaPdfFiles/', null= True)
     isapproved = models.BooleanField(default=False)
@@ -150,4 +150,16 @@ class visaPayment(models.Model):
     def __str__ (self):
         return str(self.payed)+ ' ' + str(self.blockAddress)
     
+#  points
+class Notes(models.Model):
+    notetype = (
+        ('pay','پرداخت'),
+        ('getpay','دریافت')
+    )
+    name = models.CharField(max_length=50)
+    whatfor = models.CharField(max_length=100)
+    type = models.CharField(choices=notetype , max_length=50,default='pay')
+    amount =models.FloatField()
+    money = models.ForeignKey(Money,on_delete=models.CASCADE)
+    date = models.DateField(auto_now=True)
 # Create your models here.

@@ -17,6 +17,10 @@
                     <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> مقدار پرداخت به سفارت</p>
                     <input type="text" name="payed_txt" class="form-control" value="{{registerPayment.payed}}">
                 </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                    <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> مقدار پرداخت مشتری</p>
+                    <input type="text" name="cupayed_txt" class="form-control" value="{{cupay}}">
+                </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">   
                     <p class="text-dark m-1"><i class="fa text-danger px-2 fa-pen" aria-hidden="true"></i> سند تاییدی ویزا</p>
                     <input type="file" name="visapdf_file" class="form-control" value="">
@@ -42,7 +46,7 @@
                     <p class="fs-5 text-info px-3"> ویزا ثبت نگردیده </p>
                     {% endif %}
                 </div>
-                
+                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5"></div>
                 <div class="col-lg-4 col-md-4 col-sm-12 p-2 fs-5">
                         <input type="checkbox" class="btn-check " id="btncheck1" name="isapproved_txt" autocomplete="off" {{approve}}>
                         <label class="btn btn-outline-warning text-dark w-100 fw-bold fs-5" for="btncheck1">

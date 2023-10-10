@@ -24,17 +24,7 @@
                         تخلص</p>
                     <input type="text" name="lastname_txt" class="form-control">
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
-                    <p class="text-dark m-1">
-                        <i class="fa fa-user-plus text-danger px-2" aria-hidden="true"></i>
-                        </i>معرف
-                    </p>
-                    <select class="form-select" name="employee_txt" id="emp" aria-label="Default select example">
-                        {% for item in employees %}
-                            <option value="{{item.id}}"> {{item.admin}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                
 
                 <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                     <p class="text-dark m-1"><i class="fa fa-envelope text-danger px-2"
@@ -74,7 +64,6 @@
                         نمبر پاسپورت</p>
                     <input type="text" name="passport_txt" class="form-control">
                 </div>
-                <div class="col-6"></div>
                 <div class="col-lg-4 col-md-4 col-12 fs-5 mt-3">
                     <p class="text-dark m-1">
                         <i class="fa fa-server text-danger px-2" aria-hidden="true"></i>
@@ -143,7 +132,6 @@
                         </div>
                     </div>
                 </div>
-           
         </div>
     </form>
 </div>

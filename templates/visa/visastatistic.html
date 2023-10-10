@@ -157,7 +157,7 @@
 
             <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
               <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
-                <div class="m-0 bg-success" style="width: {{percentage_ofpay}}%; border-raduis:5px;">{{percentage_ofpay}}</div>
+                <div class="m-0 bg-warning" style="width: {{percentage_ofpay}}%; border-raduis:5px;">{{percentage_ofpay}}</div>
               </div>
             </div>
             <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{total_ofpay}}</div>
@@ -168,18 +168,28 @@
 
             <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
               <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
-                <div class="m-0 bg-danger" style="width: {{percentage_cupay}}%; border-raduis:5px;">{{percentage_cupay}}</div>
+                <div class="m-0 bg-warning" style="width: {{percentage_cupay}}%; border-raduis:5px;">{{percentage_cupay}}</div>
               </div>
             </div>
             <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{total_cupay}}</div>
         </div>
+        <div class="row m-0 p-0">
+          <div class="col-3 text-dark p-2 fw-bold" style="border: 1px solid grey;">مجموعه پرداختی های مشتری</div>
 
+          <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
+            <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
+              <div class="m-0 bg-warning" style="width: {{percentage_cupay_pay}}%; border-raduis:5px;">{{percentage_cupay_pay}}</div>
+            </div>
+          </div>
+          <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{total_cupay_pay}}</div>
+      </div>
+        
         <div class="row m-0 p-0">
             <div class="col-3 text-dark p-2 fw-bold" style="border: 1px solid grey;">مجموعه مفاد تا به حال</div>
 
             <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
               <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
-                <div class="m-0 bg-info" style="width: {{percentage_mafad}}%; border-raduis:5px;">{{percentage_mafad}}%</div>
+                <div class="m-0 {{mafad_min}}" style="width: {{percentage_mafad}}%; border-raduis:5px;">{{percentage_mafad}}%</div>
               </div>
             </div>
             <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{mafad}}</div>
