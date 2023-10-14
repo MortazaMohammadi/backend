@@ -28,14 +28,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                     <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i> نوعیت پول</p>
-                    <select class="form-select" id="" name="money_txt" aria-label="Default select example">
-                        
-                        <option value="{{registerPayment.money.id}}">{{registerPayment.money.money_type}} </option>
-                       
-                        {% for item in money %}
-                            <option value="{{item.id}}">{{item.money_type}} </option>
-                        {% endfor %}
-                    </select>
+                    <p class="fs-5 text-primary ps-4">{{visa.money.money_type}}</p>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                     <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>سند ویزا</p>

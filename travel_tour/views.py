@@ -1,3 +1,4 @@
+import array
 from django.shortcuts import render
 from django.shortcuts import render, redirect ,get_object_or_404
 from django.contrib.auth import login, logout , authenticate , update_session_auth_hash
@@ -29,12 +30,10 @@ def loginPage(request):
             context['aut']= 'نام کاربری یا رمز عبور تان اشتباه است.'
     return render(request, 'account/login.html',context)
 
-
 # logout
 def logout_user(request):
     logout(request)
     return redirect('/')
-
 
 @login_required(login_url='/')
 # add payments
@@ -283,8 +282,6 @@ def visaView(request, visa_id):
     visa = mod.Visa.objects.get(id=visa_id)
     visapayment = mod.visaPayment.objects.get(visa=visa)
     visarecived = mod.VisaRecivedDoc.objects.get(visa=visa.id)
-    
-    
     context = {
         'page': 'مشخصات ویزا',
         'visa': visa,
@@ -385,14 +382,13 @@ def registerPayment(request,visa_id):
     if registerPayment:
         context['registerPayment'] = registerPayment
     context['visa'] = visa
-    money = mod.Money.objects.all()
+    
     cuspay = mod.visaPayment.objects.get(visa = visa_id)
     context['cupay'] = cuspay.payed
-    context['money'] = money
     if request.method == 'POST':
         payed = request.POST.get('payed_txt')
         cupayed = request.POST.get('cupayed_txt')
-        remoney = request.POST.get('money_txt')
+       
         isapproved = request.POST.get('isapproved_txt')
         isrejected = request.POST.get('isrejected_txt')
         iscomplate = request.POST.get('iscomplate_txt') 
@@ -401,15 +397,15 @@ def registerPayment(request,visa_id):
         if registerPayment:
             registerPayment.visa = visa
             registerPayment.payed = payed
-            registerPayment.money = mod.Money.objects.get(id = remoney)
+            
             registerPayment.save()
         else:
             try:
-                mod.Money.objects.get(id = remoney)
+                
                 newregisterPayment = mod.registerPayed(
                 visa = visa,
                 payed = payed,
-                money = mod.Money.objects.get(id = remoney) if remoney != 0 else None
+                
                 )
                 newregisterPayment.save()
             except:
@@ -479,101 +475,64 @@ def visaStatistic(request):
                visas = mod.Visa.objects.all()
                context['records'] = visaacountingList(visas)
                for i in context['records']:
-                   total_price += i['visa_price']
-                   total_cupay +=i['cupay']
-                   total_ofpay +=i['ofpay']
+                   totype = mod.Money.objects.get(money_type = 'دالر' )
+                   moneychange(i['visa_price'],i["money_type"],totype)
+                   total_price +=  moneychange(i['visa_price'],i["money_type"],totype)
+                   total_cupay += moneychange(i['cupay'],i["money_type"],totype)
+                   total_ofpay +=  moneychange(i['ofpay'],i["money_type"],totype)
               
-               context['total_ofpay'] = total_ofpay
-               context['total_cupay_pay'] = total_cupay
+               context['total_ofpay'] = round(total_ofpay,3)
+               context['total_cupay_pay'] = round(total_cupay,3)
                context['percentage_cupay_pay'] = round(context['total_cupay_pay'] * 100 / total_price,2)
-               context['total_price'] = total_price
+               context['total_price'] = round(total_price,3)
                context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
-               context['total_cupay'] = total_price - total_cupay
+               context['total_cupay'] = round(total_price - total_cupay,3)
                context['percentage_cupay'] = round(context['total_cupay'] * 100 /total_price,2)
-               context['mafad'] = total_cupay - total_ofpay
+               context['mafad'] = round(total_cupay - total_ofpay,3)
                context['mafad_min'] = 'text-white bg-danger' if round(context['mafad'] * 100 / total_price,2) < 0 else 'bg-warning'
                context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
            else:
                  visas = mod.Visa.objects.filter(visaType = Fvtype)
                  context['records'] = visaacountingList(visas)
                  for i in context['records']:
-                   total_price += i['visa_price']
-                   total_cupay +=i['cupay']
-                   total_ofpay +=i['ofpay']
+                   totype = mod.Money.objects.get(money_type = 'دالر' )
+                   moneychange(i['visa_price'],i["money_type"],totype)
+                   total_price +=  moneychange(i['visa_price'],i["money_type"],totype)
+                   total_cupay += moneychange(i['cupay'],i["money_type"],totype)
+                   total_ofpay +=  moneychange(i['ofpay'],i["money_type"],totype)
                  
-                 context['total_ofpay'] = total_ofpay
-                 context['total_cupay_pay'] = total_cupay
+                 context['total_ofpay'] = round(total_ofpay,3)
+                 context['total_cupay_pay'] = round(total_cupay,3)
                  context['percentage_cupay_pay'] = round(context['total_cupay_pay'] * 100 / total_price,2)
-                 context['total_price'] = total_price
+                 context['total_price'] = round(total_price,3)
                  context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
-                 context['total_cupay'] = total_price - total_cupay
+                 context['total_cupay'] = round(total_price - total_cupay,3)
                  context['percentage_cupay'] = round(context['total_cupay'] * 100 /total_price,2)
-                 context['mafad'] = total_cupay - total_ofpay
+                 context['mafad'] = round(total_cupay - total_ofpay,3)
                  context['mafad_min'] = 'text-white bg-danger' if round(context['mafad'] * 100 / total_price,2) < 0 else 'bg-warning'
                  context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
          else:
               context['records'] = visaacountingList(mod.Visa.objects.all())
               for i in context['records']:
-                   total_price += i['visa_price']
-                   total_cupay +=i['cupay']
-                   total_ofpay +=i['ofpay']
+                   totype = mod.Money.objects.get(money_type = 'دالر' )
+                   moneychange(i['visa_price'],i["money_type"],totype)
+                   total_price +=  moneychange(i['visa_price'],i["money_type"],totype)
+                   total_cupay += moneychange(i['cupay'],i["money_type"],totype)
+                   total_ofpay +=  moneychange(i['ofpay'],i["money_type"],totype)
 
-              context['total_ofpay'] = total_ofpay
-              context['total_cupay_pay'] = total_cupay
+              context['total_ofpay'] = round(total_ofpay,3)
+              context['total_cupay_pay'] = round(total_cupay,3)
               context['percentage_cupay_pay'] = round(context['total_cupay_pay'] * 100 / total_price,2)
-              context['total_price'] = total_price
+              context['total_price'] = round(total_price,3)
               context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
-              context['total_cupay'] = total_price - total_cupay
+              context['total_cupay'] = round(total_price - total_cupay,3)
               context['percentage_cupay'] = round(context['total_cupay'] * 100 /total_price,2)
-              context['mafad'] = total_cupay - total_ofpay
+              context['mafad'] = round(total_cupay - total_ofpay,3)
               context['mafad_min'] = 'text-white bg-danger' if round(context['mafad'] * 100 / total_price,2) < 0 else 'bg-warning'
               context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
     context['vtype'] = mod.VisaType.objects.all()
     context['visastatistic'] = ' text-warning sub-bg '
     return render(request,'visa/visastatistic.html',context)
-
-
-def mafad(price,ofpay,cupay,visa_id):
-    visatype = mod.VisaType.objects.get(visa = visa_id)
-    if cupay > visatype.price:
-        return cupay - visatype.price
-    else:
-        return cupay - ofpay
-    
-    
-def visaacountingList(visas):
-    records = []
-    for visa in visas:
-        record = {}
-
-        # Retrieve visa payment
-        cupay = mod.visaPayment.objects.get(visa=visa)
-
-        # Retrieve optional payment
-        try:
-            ofpay = mod.registerPayed.objects.get(visa=visa)
-        except mod.registerPayed.DoesNotExist:
-            ofpay = None
-
-        # Assign values to the record dictionary
-        record['visa_id'] = visa.id
-        record['visa_customer'] = visa.customer
-        record['visa_type'] = visa.visaType
-        record['visa_price'] = visa.price
-        record['cupay'] = cupay.payed
-
-
-        if ofpay:
-            record['ofpay'] = ofpay.payed
-
-        else:
-            record['ofpay'] = 0.0
-           
-        record['mafad'] = mafad(visa.price, record['ofpay'] , cupay.payed,visa.id)
-        record['remain'] = visa.price - cupay.payed
-        
-        records.append(record) 
-    return records
 
 
 def employeeRegister(request): 
@@ -631,3 +590,86 @@ def employeeRegister(request):
             return render(request, 'account/employee_registeration.html', context)
     context['page'] = 'راجستر کارمند'
     return render (request, 'account/employee_registeration.html')
+
+def mafad(price,ofpay,cupay,visa_id):
+    visatype = mod.VisaType.objects.get(visa = visa_id)
+    visa = mod.Visa.objects.get(id = visa_id)
+    vtype = round(moneychange(visatype.price,visatype.money,visa.money),3)
+    
+    if cupay > vtype:
+        return cupay - vtype
+    else:
+        return cupay - ofpay 
+    
+def visaacountingList(visas):
+    records = []
+    for visa in visas:
+        record = {}
+
+        # Retrieve visa payment
+        cupay = mod.visaPayment.objects.get(visa=visa)
+
+        # Retrieve optional payment
+        try:
+            ofpay = mod.registerPayed.objects.get(visa=visa)
+        except mod.registerPayed.DoesNotExist:
+            ofpay = None
+
+        # Assign values to the record dictionary
+        record['visa_id'] = visa.id
+        record['visa_customer'] = visa.customer
+        record['visa_type'] = visa.visaType
+        record['visa_price'] = visa.price
+        record['money_type'] = visa.money
+        record['cupay'] = cupay.payed
+
+
+        if ofpay:
+            record['ofpay'] = ofpay.payed
+
+        else:
+            record['ofpay'] = 0.0
+           
+        record['mafad'] = mafad(visa.price, record['ofpay'] , cupay.payed,visa.id)
+        record['remain'] = visa.price - cupay.payed
+        
+        records.append(record) 
+    return records
+
+def notes(request):
+    context = {}
+    
+    context['money'] = mod.Money.objects.all()
+    if request.method == 'POST':
+        name = request.POST.get('name_txt')
+        whatfor = request.POST.get('whatfor_txt')
+        type = request.POST.get('type_txt')
+        amount = request.POST.get('amount_txt')
+        money = request.POST.get('money_txt')
+        
+        note = mod.Notes(
+            name = name,
+            whatfor = whatfor,
+            type = type,
+            amount = amount,
+            money = mod.Money.objects.get(id = money)
+        )
+        note.save()
+        return redirect('notes')
+    context['notes'] = 'text-warning sub-bg'
+    context['records'] = mod.Notes.objects.all()
+    return render(request, 'note/notes.html',context)
+
+
+def moneychange(amount,type, totype):
+    type1 = mod.Money.objects.get(id = type.id)
+    totype1 = mod.Money.objects.get(id = totype.id)
+    afghani = 0.0
+    othercurency = 0.0
+    if type1.money_type != 'اففانی':
+        afghani = amount * type1.sell_amount / type1.amount
+        othercurency = afghani * totype1.amount/ totype1.sell_amount
+    else:
+        othercurency = afghani * totype1.amount/ totype1.sell_amount
+    return round(othercurency,3)
+

@@ -153,13 +153,14 @@ class visaPayment(models.Model):
 #  points
 class Notes(models.Model):
     notetype = (
-        ('pay','پرداخت'),
-        ('getpay','دریافت')
+        ('پرداخت','پرداخت'),
+        ('دریافت','دریافت')
     )
     name = models.CharField(max_length=50)
     whatfor = models.CharField(max_length=100)
     type = models.CharField(choices=notetype , max_length=50,default='pay')
     amount =models.FloatField()
     money = models.ForeignKey(Money,on_delete=models.CASCADE)
-    date = models.DateField(auto_now=True)
+    date = models.DateField(auto_now_add=True)
+    
 # Create your models here.

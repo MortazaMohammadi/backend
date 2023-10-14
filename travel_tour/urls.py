@@ -23,7 +23,8 @@ urlpatterns =[
     path('customerUpdate/<int:customer_id>/',customerUpdate,name = 'customerUpdate'),
     path('registerPayment/<int:visa_id>/',registerPayment,name = 'customerUpdate'),
     path('visaStatistic', visaStatistic,name = 'visaStatistic'),
-    path('employeeRegister', employeeRegister, name = 'employeeRegister')
+    path('employeeRegister', employeeRegister, name = 'employeeRegister'),
+    path('notes',notes,name = 'notes')
     
     
     # path('', home_page),
