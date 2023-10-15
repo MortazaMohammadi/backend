@@ -363,11 +363,6 @@ def visaUpdate(request,visa_id):
     context ['page'] = 'اپدیت ویزا'
     return render(request, 'visa/visaupdate.html',context)
 
-def customerUpdate(request,customer_id):
-    context = {}
-    context['page'] = 'آپدیت ویزا'
-    return render(request,'visa/customerUpdate.html',context)
-
 
 def registerPayment(request,visa_id):
     context = {}
@@ -468,15 +463,21 @@ def visaStatistic(request):
     total_price = 0
     total_ofpay = 0
     total_cupay = 0 
+    context['money'] = mod.Money.objects.all()
     if request.method == 'GET':
          Fvtype = request.GET.get('vtype_txt')
+         moneytype = request.GET.get('money_txt')
+         if moneytype:
+            totype = mod.Money.objects.get(id = moneytype)
+         else:
+            totype = mod.Money.objects.get(id = 1)
          if Fvtype:
            if Fvtype == '0':
                visas = mod.Visa.objects.all()
                context['records'] = visaacountingList(visas)
                for i in context['records']:
-                   totype = mod.Money.objects.get(money_type = 'دالر' )
-                   moneychange(i['visa_price'],i["money_type"],totype)
+                   
+                   moneychange(i['visa_price'],i["money_type"],totype.money_type)
                    total_price +=  moneychange(i['visa_price'],i["money_type"],totype)
                    total_cupay += moneychange(i['cupay'],i["money_type"],totype)
                    total_ofpay +=  moneychange(i['ofpay'],i["money_type"],totype)
@@ -495,7 +496,7 @@ def visaStatistic(request):
                  visas = mod.Visa.objects.filter(visaType = Fvtype)
                  context['records'] = visaacountingList(visas)
                  for i in context['records']:
-                   totype = mod.Money.objects.get(money_type = 'دالر' )
+                   
                    moneychange(i['visa_price'],i["money_type"],totype)
                    total_price +=  moneychange(i['visa_price'],i["money_type"],totype)
                    total_cupay += moneychange(i['cupay'],i["money_type"],totype)
@@ -514,7 +515,7 @@ def visaStatistic(request):
          else:
               context['records'] = visaacountingList(mod.Visa.objects.all())
               for i in context['records']:
-                   totype = mod.Money.objects.get(money_type = 'دالر' )
+                   
                    moneychange(i['visa_price'],i["money_type"],totype)
                    total_price +=  moneychange(i['visa_price'],i["money_type"],totype)
                    total_cupay += moneychange(i['cupay'],i["money_type"],totype)
@@ -546,6 +547,7 @@ def employeeRegister(request):
         else:
             profileImage = None
         phone = request.POST.get('phone_txt')
+        address = request.POST.get('address_txt')
         email = request.POST.get('email_txt')
         username = request.POST.get('username_txt')
         password = request.POST.get('password1_txt')
@@ -568,19 +570,22 @@ def employeeRegister(request):
                     Boss_obj = mod.Boss(
                         admin=user,
                         phone=phone,
+                        address = address,
                     )
                     Boss_obj.save()
                     return redirect('/')
                 elif userType == 'Employee':
                     Employee_obj = mod.Employee(
                         admin=user,
-                        phone=phone
+                        phone=phone,
+                        address = address,
                     )
                     Employee_obj.save()
                 elif userType == 'Manager':
                     Manager_obj = mod.Manager(
                         admin=user,
                         phone=phone,
+                        address = address
                     )
                     Manager_obj.save()
                 return redirect('/')
@@ -663,7 +668,7 @@ def notes(request):
 
 def moneychange(amount,type, totype):
     type1 = mod.Money.objects.get(id = type.id)
-    totype1 = mod.Money.objects.get(id = totype.id)
+    totype1 = mod.Money.objects.get(money_type = totype)
     afghani = 0.0
     othercurency = 0.0
     if type1.money_type != 'اففانی':
@@ -673,3 +678,61 @@ def moneychange(amount,type, totype):
         othercurency = afghani * totype1.amount/ totype1.sell_amount
     return round(othercurency,3)
 
+from django.contrib import messages
+def employeeUpdate(request,user_id):
+    context = {}
+    customuser = mod.CustomUser.objects.get(id = user_id)
+    myuser = None
+    
+    try:
+        if mod.Boss.objects.get(admin = customuser):
+            myuser = mod.Boss.objects.get(admin = customuser)
+        elif mod.Employee.objects.get(admin = customuser):
+            myuser = mod.Employee.objects.get(admin = customuser)
+        else:
+            myuser = mod.Manager.objects.get(admin = customuser)
+    except:
+        pass
+    context['myuser'] = myuser
+    if request.method == 'POST':
+        name = request.POST.get('name_txt')
+        lname = request.POST.get('lname_txt')
+        if 'profile_img' in request.FILES:
+            profileImage = request.FILES['profile_img']
+        else:
+            profileImage = None
+        phone = request.POST.get('phone_txt')
+        address = request.POST.get('address_txt')
+        email = request.POST.get('email_txt')
+        username = request.POST.get('username_txt')
+        cupassword = request.POST.get('password0_txt')
+        password = request.POST.get('password1_txt')
+        repassword = request.POST.get('password2_txt')
+        user = authenticate(username=request.user.username,
+                            password=cupassword)
+        if user is None:
+            messages.error(request, 'Current password is incorrect')
+           
+        else:
+            if password != repassword:
+                messages.error(
+                    request, 'new password and confirm password is does not match')
+            else:
+                user.set_password(password)
+                user.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Password changed successfully')
+               
+
+        user.first_name = name
+        user.last_name = lname
+        user.profile_image.delete()
+        user.profile_image = profileImage
+        user.email = email
+        user.username = username
+        user.save()
+        myuser.phone = phone
+        myuser.address = address
+        myuser.save()
+    context['page'] = 'آپدیت کارمند'
+    return render(request, 'account/employee_update.html',context)

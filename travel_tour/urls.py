@@ -20,10 +20,11 @@ urlpatterns =[
     path('deleteBill/<int:bill_id>/',deleteBill,name = 'deleteBill'),
     path('sendBill/<int:bill_id>/',sendBill,name = 'sendBill'),
     path('updateBill/<int:bill_id>/',updateBill,name = 'updateBill'),
-    path('customerUpdate/<int:customer_id>/',customerUpdate,name = 'customerUpdate'),
-    path('registerPayment/<int:visa_id>/',registerPayment,name = 'customerUpdate'),
+    
+    path('registerPayment/<int:visa_id>/',registerPayment,name = 'registerPayment'),
     path('visaStatistic', visaStatistic,name = 'visaStatistic'),
     path('employeeRegister', employeeRegister, name = 'employeeRegister'),
+    path('employeeUpdate/<int:user_id>/', employeeUpdate, name = 'employeeUpdate'),
     path('notes',notes,name = 'notes')
     
     

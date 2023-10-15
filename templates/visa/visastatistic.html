@@ -22,6 +22,13 @@
                 <option value="{{i.id}}">{{i.country}} {{i.type}}</option>
                 {% endfor %}
               </select>
+            </div>    
+            <div class="col-lg-3 col-md-3 col-12">
+              <select class="form-select" id="emailBy" name="money_txt" aria-label="Default select example">
+                {% for item in money %}
+                    <option value="{{item.id}}">{{item.money_type}} </option>
+                {% endfor %}
+            </select>
             </div>  
             <div class="col-lg-3 col-md-3 col-12">
               <button type="submit" class="btn btn-info sub-bg text-light w-100"><i class="fa fa-search px-2" aria-hidden="true"></i>
