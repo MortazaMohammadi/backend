@@ -61,16 +61,27 @@
                         <td>{{ bill.name }}</td>
                     </tr>
                     <tr>
-                        <td>ویزا :</td>
-                        <td>{{ bill.visatype.country }}  </td>
+                        <td>عنوان :</td>
+                        {% if bill.visatype %}
+                            <td>{{ bill.visatype.country }}</td>
+                        {% else %}
+                            <td>{{ bill.othertype.title }}</td>
+                        {% endif %}
                     </tr>
                     <tr>
-                        <td>نوعیت ویزا:</td>
-                        <td>{{ bill.visatype.type }}</td>
+                        <td>نوعیت :</td>
+                        {% if bill.visatype %}
+                            <td>{{bill.visatype.type}}</td>
+                        {% else %}
+                            <td>عادی</td>
+                        {% endif %}
                     </tr>
                     <tr>
+                        {% if bill.duration != 0 %}
                         <td> مدت اعتبار بل:</td>
                         <td class="text-danger">{{ bill.duration }} (روز)</td>
+                        {% endif %}
+                       
                     </tr>
                 </table>
             </div>

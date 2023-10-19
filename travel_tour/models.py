@@ -103,10 +103,14 @@ class VisaType(models.Model):
     def __str__ (self):
         return str(self.country)+ ' ' + str(self.duration)
 
+class otherbill(models.Model):
+    title = models.CharField(max_length=50)
+    
 class Bill(models.Model):
     name = models.CharField(max_length=50)
     reciveddoc = models.CharField(max_length=50)
-    visatype = models.ForeignKey(VisaType, on_delete=models.CASCADE)
+    visatype = models.ForeignKey(VisaType, on_delete=models.CASCADE,null=True)
+    othertype = models.ForeignKey(otherbill,on_delete=models.CASCADE,null=True)
     date = models.DateField(auto_now = True)
     price = models.FloatField()
     payed = models.FloatField()
@@ -120,7 +124,7 @@ class Visa(models.Model):
     visaType = models.ForeignKey(VisaType, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     isprocess = models.BooleanField(default=False)
-    employee = models.ForeignKey(Employee, null=True, on_delete=models.SET_NULL)
+    employee = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL)
     emailby = models.ForeignKey(OurEmail, on_delete=models.CASCADE)
     visapdf = models.FileField(upload_to='VisaPdfFiles/', null= True)
     isapproved = models.BooleanField(default=False)

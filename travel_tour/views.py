@@ -35,10 +35,11 @@ def logout_user(request):
     logout(request)
     return redirect('/')
 
-@login_required(login_url='/')
 # add payments
-def addPayment(request):
+@login_required(login_url='/')
+def addPayment(request):    
     context = {}
+    context['money'] = mod.Money.objects.all()
     if request.method == 'POST':
         paymodel = mod.Payment()
         paymodel.amount= request.POST.get('amount_txt')
@@ -57,10 +58,11 @@ def addPayment(request):
         context['addpay'] = ' text-warning sub-bg '
         return render(request, 'office/addPayment.html',context)
 
-
 # payment list and static for payment
+@login_required(login_url='/')
 def paymentList(request):
     context = {}
+    context['money'] = mod.Money.objects.all()
     if request.method == 'GET':
          Fptype = request.GET.get('ptype_txt')
          if Fptype:
@@ -81,7 +83,12 @@ def paymentList(request):
             for i in paytype: 
                 l2 = []
                 i.title
-                filtered_amount = mod.Payment.objects.filter(payment_type__id=i.id).aggregate(filtered_amount=Sum('amount'))['filtered_amount']
+                try:
+                    filtered_amount = mod.Payment.objects.filter(payment_type__id=i.id).aggregate(filtered_amount=Sum('amount'))['filtered_amount']
+                    if filtered_amount ==None:
+                        filtered_amount =0
+                except TypeError:
+                    filtered_amount = 1
                 l2.append(i.title)
                 l2.append(filtered_amount)
                 l2.append(round(filtered_amount*100/total_amount,2))
@@ -93,6 +100,7 @@ def paymentList(request):
     return render(request, 'office/paymentList.html',context)
 
 # Customer Registeration
+@login_required(login_url='/')
 def customerRegister(request):
     if request.method == 'POST':
         name = request.POST.get('name_txt')
@@ -104,7 +112,10 @@ def customerRegister(request):
         currentstate = request.POST.get('currentstate_txt')
         passport = request.POST.get('passport_txt')
         profile_image = request.FILES['profile_img']
-        card_image = request.FILES['card_img']
+        try:
+            card_image = request.FILES['card_img']
+        except:
+            card_image = None
         passport_image = request.FILES['passport_img']
          # Fetch the employee object using the provided ID
 
@@ -124,22 +135,30 @@ def customerRegister(request):
         customer.save()  # Save the customer object to the database
 
         return redirect('/customerRegister')  # Redirect to a success page
-
-
-
-    return render(request, 'visa/customerRegister.html', {'page': 'راجستر مشتری','cusregister':' text-warning sub-bg '})
+    
+    money = mod.Money.objects.all()
+    return render(request, 'visa/customerRegister.html', {'page': 'راجستر مشتری','cusregister':' text-warning sub-bg ','money' : money})
 
 
 # visa registeration page
+@login_required(login_url='/')
 def visaRegister(request):
     context = {}
     if request.method == 'POST':
         visaType = request.POST.get('visaType_txt')
         customer = request.POST.get('customer_txt')
-        employee_id = request.POST.get('employee_txt')
-        recivedDoc = request.POST.get('recivedDoc_txt')  # Assuming you have a file input field with name 'recived_doc'
-        blockAddress = request.POST.get('blockAddress_txt')
-        blockImage = request.FILES.get('block_img')  # Assuming you have a file input field with name 'block_image'
+        try:
+             recivedDoc = request.POST.get('recivedDoc_txt')
+        except:
+            recivedDoc = None# Assuming you have a file input field with name 'recived_doc'
+        try:
+             blockAddress = request.POST.get('blockAddress_txt')
+        except:
+            blockAddress = 'وجود ندارد'
+        try:
+            blockImage = request.FILES.get('block_img')  # Assuming you have a file input field with name 'block_image'
+        except:
+            blockImage = None
         payed = request.POST.get('payed_txt')
         emailBy = request.POST.get('emailBy_txt')
         price = request.POST.get('price_txt')
@@ -149,7 +168,7 @@ def visaRegister(request):
         dbvisatype = mod.VisaType.objects.get(id= visaType)
         dbemailBy = mod.OurEmail.objects.get(id = emailBy)
         dbmoney = mod.Money.objects.get(id = money)
-        employee = mod.Employee.objects.get(id=employee_id) 
+        employee = mod.CustomUser.objects.get(id = request.user.id )
         visa = mod.Visa(
             visaType = dbvisatype,
             customer = dbcustomer,
@@ -172,8 +191,8 @@ def visaRegister(request):
         reciveddoc.save()
         visaPayment.save()
         return redirect('/visaRegister')   
-    employees = mod.Employee.objects.all()    
-    context['employees'] = employees  
+ 
+    context['money'] = mod.Money.objects.all()
     context['money'] = mod.Money.objects.all()
     context['emailby'] = mod.OurEmail.objects.all()
     context['customers'] = mod.Customer.objects.all().reverse()
@@ -197,12 +216,14 @@ def visaList(request):
             
             return render(request, 'visa/visaList.html', context)
     
+    context['money'] = mod.Money.objects.all()
     context['visalisting'] = mod.Visa.objects.all()
     context['visaList'] = 'text-warning sub-bg'
     context['page'] = 'لیست ویزا'
     return render(request, 'visa/visaList.html', context)
 
 # bill print
+@login_required(login_url='/')
 def bill(request):
     context = {}
     if request.method == 'POST':
@@ -213,12 +234,23 @@ def bill(request):
         payed = request.POST.get('payed_txt')
         money = request.POST.get('money_txt')
         duration = request.POST.get('duration_txt')
-        dbvisatype = mod.VisaType.objects.get(id= visatype)
+        try:
+            dbvisatype = mod.VisaType.objects.get(id= visatype)
+        except:
+          dbvisatype = None
+        
+        mytype = None
+        mytype2 = None
+        if dbvisatype:
+            mytype = dbvisatype
+        else:
+            mytype2 = mod.otherbill.objects.get(title = visatype)
         dbmoney = mod.Money.objects.get(id = money)
         billing = mod.Bill(
             name = name,
             reciveddoc = reciveddoc,
-            visatype = dbvisatype,
+            visatype = mytype,
+            othertype = mytype2,
             price = price,
             payed = payed,
             money = dbmoney,
@@ -232,10 +264,12 @@ def bill(request):
     context['page'] = 'راجستر بل'
     context['billListing'] = mod.Bill.objects.filter(isdone = False)
     context['visaList'] = mod.VisaType.objects.all()
+    context['other'] = mod.otherbill.objects.all()
     context['money'] = mod.Money.objects.all()
     return render(request, 'billing/bill.html', context)
 
 # bill print
+@login_required(login_url='/')
 def billPrint(request, bill_id):
     context = {}
     bill = mod.Bill.objects.get(id = bill_id)
@@ -246,16 +280,19 @@ def billPrint(request, bill_id):
     return render(request, 'billing/billprint.html',context)
 
 # bill delete
+@login_required(login_url='/')
 def deleteBill(request, bill_id):
     mod.Bill.objects.get(id = bill_id).delete()
     return redirect('/bill#list')
 
 # bill send for register
+@login_required(login_url='/')
 def sendBill(request, bill_id):
     mod.Bill.objects.get(id = bill_id).isdone = True
     return redirect('/bill#list')
 
 # bill update
+@login_required(login_url='/')
 def updateBill(request, bill_id):
     bill = mod.Bill.objects.get(id = bill_id)
     context={}
@@ -266,7 +303,15 @@ def updateBill(request, bill_id):
         bill.price = request.POST.get('price_txt')
         bill.payed = request.POST.get('payed_txt')
         money = request.POST.get('money_txt')
-        bill.visatype = mod.VisaType.objects.get(id= visatype)
+        try:
+            bill.visatype = mod.VisaType.objects.get(id= visatype)
+        except:
+            bill.visatype = None
+        try:
+           bill.othertype =  mod.otherbill.objects.get(title = visatype) 
+        except:
+            bill.othertype = None
+        
         bill.money = mod.Money.objects.get(id = money)
         bill.duration = request.POST.get('duration_txt')
         bill.save()
@@ -274,10 +319,12 @@ def updateBill(request, bill_id):
     else:
         context['bill'] = bill
         context['visaList'] = mod.VisaType.objects.all()
+        context['other'] = mod.otherbill.objects.all()
         context['money'] = mod.Money.objects.all()
     return render(request, 'billing/updateBill.html', context)
     
 # visa View 
+@login_required(login_url='/')
 def visaView(request, visa_id):
     visa = mod.Visa.objects.get(id=visa_id)
     visapayment = mod.visaPayment.objects.get(visa=visa)
@@ -288,16 +335,20 @@ def visaView(request, visa_id):
         'visapayment': visapayment,
         'visarecived': visarecived
     }
+    
+    context['money'] = mod.Money.objects.all()
     return render(request, 'visa/visaView.html', context)
 
 
 # payment update
+@login_required(login_url='/')
 def paymentUpdate(request, pay_id):
     context = {'page' : 'آمار مصرف'}
     return render(request, 'office/paymentUpdate', context)
 
 
 # customer list
+@login_required(login_url='/')
 def customerList(request):
     context= {'page': 'لیست مشتریان'}
     return render(request, 'visa/customerList.html', context)
@@ -306,6 +357,7 @@ def customerList(request):
 # visa list update cancel save payed approved search engine
 
 # visa update 
+@login_required(login_url='/')
 def visaUpdate(request,visa_id):
     context = {}
     visa = mod.Visa.objects.get(id = visa_id)
@@ -315,9 +367,19 @@ def visaUpdate(request,visa_id):
     if request.method == 'POST':
         visaType = request.POST.get('visaType_txt')
         customer = request.POST.get('customer_txt')
-        recivedDoc = request.POST.get('recivedDoc_txt')  # Assuming you have a file input field with name 'recived_doc'
-        blockAddress = request.POST.get('blockAddress_txt')
-        blockImage = request.FILES.get('block_img')  # Assuming you have a file input field with name 'block_image'
+        try:
+            recivedDoc = request.POST.get('recivedDoc_txt')
+        except:
+            recivedDoc = None # Assuming you have a file input field with name 'recived_doc'
+        try:
+            blockAddress = request.POST.get('blockAddress_txt')
+        except:
+            blockAddress = None
+        try:
+            blockImage = request.FILES.get('block_img')
+        except:
+            blockImage = None
+         # Assuming you have a file input field with name 'block_image'
         payed = request.POST.get('payed_txt')
         emailBy = request.POST.get('emailBy_txt')
         price = request.POST.get('price_txt')
@@ -363,7 +425,8 @@ def visaUpdate(request,visa_id):
     context ['page'] = 'اپدیت ویزا'
     return render(request, 'visa/visaupdate.html',context)
 
-
+# register payment
+@login_required(login_url='/')
 def registerPayment(request,visa_id):
     context = {}
     registerPayment = None
@@ -455,16 +518,22 @@ def registerPayment(request,visa_id):
             context['reject'] = "checked"
         if visa.iscomplate ==True:
             context['complate'] = "checked"
+    
+    context['money'] = mod.Money.objects.all()
     return render(request,'visa/registerpayment.html',context)
 
+# visa statistic
+@login_required(login_url='/')
 def visaStatistic(request):
     context = {}
     context['page'] = 'آمار ویزا ها'
     total_price = 0
     total_ofpay = 0
     total_cupay = 0 
+    
     context['money'] = mod.Money.objects.all()
-    if request.method == 'GET':
+    try:
+        if request.method == 'GET':
          Fvtype = request.GET.get('vtype_txt')
          moneytype = request.GET.get('money_txt')
          if moneytype:
@@ -494,24 +563,25 @@ def visaStatistic(request):
                context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
            else:
                  visas = mod.Visa.objects.filter(visaType = Fvtype)
-                 context['records'] = visaacountingList(visas)
-                 for i in context['records']:
-                   
-                   moneychange(i['visa_price'],i["money_type"],totype)
-                   total_price +=  moneychange(i['visa_price'],i["money_type"],totype)
-                   total_cupay += moneychange(i['cupay'],i["money_type"],totype)
-                   total_ofpay +=  moneychange(i['ofpay'],i["money_type"],totype)
-                 
-                 context['total_ofpay'] = round(total_ofpay,3)
-                 context['total_cupay_pay'] = round(total_cupay,3)
-                 context['percentage_cupay_pay'] = round(context['total_cupay_pay'] * 100 / total_price,2)
-                 context['total_price'] = round(total_price,3)
-                 context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
-                 context['total_cupay'] = round(total_price - total_cupay,3)
-                 context['percentage_cupay'] = round(context['total_cupay'] * 100 /total_price,2)
-                 context['mafad'] = round(total_cupay - total_ofpay,3)
-                 context['mafad_min'] = 'text-white bg-danger' if round(context['mafad'] * 100 / total_price,2) < 0 else 'bg-warning'
-                 context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
+                 if len(visas) != 0:
+                    context['records'] = visaacountingList(visas)
+                    for i in context['records']:
+                    
+                        moneychange(i['visa_price'],i["money_type"],totype)
+                        total_price +=  moneychange(i['visa_price'],i["money_type"],totype)
+                        total_cupay += moneychange(i['cupay'],i["money_type"],totype)
+                        total_ofpay +=  moneychange(i['ofpay'],i["money_type"],totype)
+                    
+                    context['total_ofpay'] = round(total_ofpay,3)
+                    context['total_cupay_pay'] = round(total_cupay,3)
+                    context['percentage_cupay_pay'] = round(context['total_cupay_pay'] * 100 / total_price,2)
+                    context['total_price'] = round(total_price,3)
+                    context['percentage_ofpay'] = round(total_ofpay * 100 / total_price,2)
+                    context['total_cupay'] = round(total_price - total_cupay,3)
+                    context['percentage_cupay'] = round(context['total_cupay'] * 100 /total_price,2)
+                    context['mafad'] = round(total_cupay - total_ofpay,3)
+                    context['mafad_min'] = 'text-white bg-danger' if round(context['mafad'] * 100 / total_price,2) < 0 else 'bg-warning'
+                    context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
          else:
               context['records'] = visaacountingList(mod.Visa.objects.all())
               for i in context['records']:
@@ -531,11 +601,14 @@ def visaStatistic(request):
               context['mafad'] = round(total_cupay - total_ofpay,3)
               context['mafad_min'] = 'text-white bg-danger' if round(context['mafad'] * 100 / total_price,2) < 0 else 'bg-warning'
               context['percentage_mafad'] = abs(round(context['mafad'] * 100 / total_price,2))
+    except:
+         return HttpResponseNotFound('<h1 style = "text-align: center"> هیچ ویزای وجود ندارد </h1>')
     context['vtype'] = mod.VisaType.objects.all()
     context['visastatistic'] = ' text-warning sub-bg '
     return render(request,'visa/visastatistic.html',context)
 
-
+# employee register
+@login_required(login_url='/')
 def employeeRegister(request): 
     context = {}
     if request.method == 'POST':
@@ -594,8 +667,11 @@ def employeeRegister(request):
             print('password mismatch')
             return render(request, 'account/employee_registeration.html', context)
     context['page'] = 'راجستر کارمند'
+    
+    context['money'] = mod.Money.objects.all()
     return render (request, 'account/employee_registeration.html')
 
+# mafad function ..................................
 def mafad(price,ofpay,cupay,visa_id):
     visatype = mod.VisaType.objects.get(visa = visa_id)
     visa = mod.Visa.objects.get(id = visa_id)
@@ -606,6 +682,7 @@ def mafad(price,ofpay,cupay,visa_id):
     else:
         return cupay - ofpay 
     
+# visa acounting list ............................
 def visaacountingList(visas):
     records = []
     for visa in visas:
@@ -641,6 +718,8 @@ def visaacountingList(visas):
         records.append(record) 
     return records
 
+# Notes  
+@login_required(login_url='/')
 def notes(request):
     context = {}
     
@@ -665,7 +744,7 @@ def notes(request):
     context['records'] = mod.Notes.objects.all()
     return render(request, 'note/notes.html',context)
 
-
+# money changing ..........................
 def moneychange(amount,type, totype):
     type1 = mod.Money.objects.get(id = type.id)
     totype1 = mod.Money.objects.get(money_type = totype)
@@ -678,8 +757,11 @@ def moneychange(amount,type, totype):
         othercurency = afghani * totype1.amount/ totype1.sell_amount
     return round(othercurency,3)
 
+
+# profile update
 from django.contrib import messages
 def employeeUpdate(request,user_id):
+    context['money'] = mod.Money.objects.all()
     context = {}
     customuser = mod.CustomUser.objects.get(id = user_id)
     myuser = None
@@ -712,11 +794,12 @@ def employeeUpdate(request,user_id):
                             password=cupassword)
         if user is None:
             messages.error(request, 'Current password is incorrect')
-           
+            return redirect('/employeeUpdate/'+ str(user_id))
         else:
             if password != repassword:
                 messages.error(
                     request, 'new password and confirm password is does not match')
+                return redirect('/employeeUpdate/'+ str(user_id))
             else:
                 user.set_password(password)
                 user.save()
@@ -724,15 +807,39 @@ def employeeUpdate(request,user_id):
                 messages.success(request, 'Password changed successfully')
                
 
-        user.first_name = name
-        user.last_name = lname
-        user.profile_image.delete()
-        user.profile_image = profileImage
-        user.email = email
-        user.username = username
-        user.save()
-        myuser.phone = phone
-        myuser.address = address
-        myuser.save()
+            user.first_name = name
+            user.last_name = lname
+            if profileImage:
+                user.profile_image.delete()
+                user.profile_image = profileImage
+            else:
+                pass
+            user.email = email
+            user.username = username
+            user.save()
+            myuser.phone = phone
+            myuser.address = address
+            myuser.save()
+            return redirect('/bill')
     context['page'] = 'آپدیت کارمند'
     return render(request, 'account/employee_update.html',context)
+
+
+# money update
+def moneyUpdate(request):
+    if request.method == 'POST':
+        # Retrieve the updated data from the form
+        money = request.POST.get('money_txt')
+        amount = request.POST.get('amount_txt')
+        sell= request.POST.get('sell_txt')
+
+        # Update the record in the database
+        record = mod.Money.objects.get(id=money)  # Assuming you have the record ID
+        record.amount = amount
+        record.sell_amount = sell
+        record.save()
+
+        # Redirect the user or render a success template
+        return redirect('/bill')  # Assuming you have a success URL name
+
+

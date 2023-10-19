@@ -14,11 +14,11 @@
                 <div class="row m-0 text-start">
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-user text-danger px-2" aria-hidden="true"></i>  نام</p>
-                        <input type="text" class="form-control" name="name_txt">
+                        <input type="text" class="form-control" name="name_txt" required>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
                         <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>  اسناد دریافتی</p>
-                        <input type="text" class="form-control" name="reciveddoc_txt">
+                        <input type="text" class="form-control" name="reciveddoc_txt" value="پاسپورت " required>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>نوعیت ویزا</p>
@@ -26,15 +26,18 @@
                             {% for item in visaList %}
                             <option class="" value="{{ item.id }}">{{ item.country }} {{item.type}}</option>
                             {% endfor %}
+                            {% for item in other %}
+                            <option class="" value="{{ item.title }}">{{ item.title }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                      <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  قیمت</p>
-                        <input type="number" class="form-control" name="price_txt" >
+                        <input type="number" class="form-control" name="price_txt" required >
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
                         <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  پیش پرداخت</p>
-                        <input type="number" class="form-control" name="payed_txt">
+                        <input type="number" class="form-control" name="payed_txt" value="0" required >
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>نوعیت پول</p>
@@ -46,7 +49,7 @@
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
                         <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  مدت اعتبار </p>
-                        <input type="number" class="form-control" name="duration_txt">
+                        <input type="number" class="form-control" name="duration_txt" value="0" required>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="m-4"></p>
@@ -64,7 +67,7 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col"> نام</th>
-                    <th scope="col"> ویزا</th>
+                    <th scope="col"> عنوان</th>
                     <th scope="col">پرنت </th>
                     <th scope="col">ویرایش </th>
                     <th scope="col">ارسال برای ثبت</th>
@@ -76,7 +79,13 @@
                  <tr>
                     <th scope="row">{{ items.id }}</th>
                     <td>{{ items.name }}</td>
+                    
+                    {% if items.visatype %}
                     <td>{{ items.visatype.country }} {{items.visatype.type}}</td>
+                    {% else %}
+                    <td>{{ items.othertype.title }}</td>
+                    {% endif %}
+                        
                     <td><a href="billprint/{{items.id}}" onclick="printPdf('billprint/{{items.id}}'); return false;" class="btn btn-info w-100">یرنت</a></td>
                     <td><a href="updateBill/{{items.id}}" class="btn btn-primary w-100">ویرایش</a></td>
                     <td> <a href="deleteBill/{{items.id}}" class="btn btn-success w-100">ارسال</a></td>

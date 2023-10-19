@@ -14,28 +14,37 @@
                 <div class="row m-0 text-start">
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-user text-danger px-2" aria-hidden="true"></i>  نام</p>
-                        <input type="text" class="form-control" name="name_txt" value="{{bill.name}}">
+                        <input type="text" class="form-control" name="name_txt" value="{{bill.name}}" required>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
                         <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>  اسناد دریافتی</p>
-                        <input type="text" class="form-control" name="reciveddoc_txt" value = {{bill.reciveddoc}}> 
+                        <input type="text" class="form-control" name="reciveddoc_txt" value = {{bill.reciveddoc}} required> 
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>نوعیت ویزا</p>
                         <select class="form-select" aria-label="Default select example" name="visatype_txt">
+                            
+                            {% if bill.visatype %}
                             <option class="" value="{{ bill.visatype.id }}">{{ bill.visatype.country }} {{bill.visatype.type}}</option>
+                            {% else %}
+                            <option class="" value="{{ bill.othertype.title }}">{{ bill.othertype.title }}</option>
+                            {% endif %}
+                                
                             {% for item in visaList %}
                             <option class="" value="{{ item.id }}">{{ item.country }} {{item.type}}</option>
+                            {% endfor %}
+                            {% for item in other %}
+                            <option class="" value="{{ item.title }}">{{ item.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
                      <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  قیمت</p>
-                        <input type="number" class="form-control" name="price_txt" value="{{bill.price}}">
+                        <input type="number" class="form-control" name="price_txt" value="{{bill.price}}" required>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
                         <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  پیش پرداخت</p>
-                        <input type="number" class="form-control" name="payed_txt" value="{{bill.payed}}">
+                        <input type="number" class="form-control" name="payed_txt" value="{{bill.payed}}" required>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>نوعیت پول</p>
@@ -48,7 +57,7 @@
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
                         <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  مدت اعتبار </p>
-                        <input type="number" class="form-control" name="duration_txt" value="{{bill.duration}}">
+                        <input type="number" class="form-control" name="duration_txt" value="{{bill.duration}}" required>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="m-4"></p>

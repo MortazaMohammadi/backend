@@ -34,5 +34,7 @@ function printPdf(pdfUrl) {
   };
 }
 
-// Close the options list when clicking outside the input field or list
+var today = new Date();
+var formattedDate = today.toISOString().substring(0, 10);
+document.getElementsByName('date_txt')[0].value = formattedDate;
 

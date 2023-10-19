@@ -25,8 +25,8 @@ urlpatterns =[
     path('visaStatistic', visaStatistic,name = 'visaStatistic'),
     path('employeeRegister', employeeRegister, name = 'employeeRegister'),
     path('employeeUpdate/<int:user_id>/', employeeUpdate, name = 'employeeUpdate'),
-    path('notes',notes,name = 'notes')
-    
+    path('notes',notes,name = 'notes'),
+    path('monayUpdate/', moneyUpdate, name='moneyUpdate'),
     
     # path('', home_page),
 

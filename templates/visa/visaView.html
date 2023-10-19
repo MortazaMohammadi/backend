@@ -59,7 +59,7 @@
                             </tr>
                             <tr>
                                 <td class=" fw-bold">  معرف :</td>
-                                <td>{{visa.customer.employee}}</td>
+                                <td>{{visa.employee}}</td>
                             </tr>
     
                         </table>
@@ -147,13 +147,21 @@
                             <td>{{ visapayment.blockAddress }}</td>
                         </tr>
                     </table>
+                   
+                   {% if visapayment.blockImage %}
                     <a href="{{ visapayment.blockImage.url}}" target="_blank">
-                        <img src="{{ visapayment.blockImage.url}}" width="100%" alt="" class="card">
+                         <img src="{{ visapayment.blockImage.url}}" width="100%" alt="" class="card">
                     </a>
+                   {% endif %}
+                    
                 </div>
                
                 <div class="col-lg-7 col-md-6 col-12 pt-5">
+                    {% if visa.customer.cardImage %}
                     <img src="{{visa.customer.cardImage.url}}" alt="" class="w-100 card m-2">
+                    
+                   {% endif %}
+                    
                     
                     <img src="{{visa.customer.passportImage.url}}" alt="" class="w-100 card m-2"> 
                 </div>

@@ -8,9 +8,19 @@
         <div class="text-center fs-3">
             <span class="text-light fw-bold">Excellent</span>
         </div>
+        <div class="logout" style="position: absolute; left:100px; top:15%">
+            <button id="openModalBtn" class="btn" data-bs-toggle="modal" data-bs-target="#updateModal">
+                <i class="fa fa-dollar fs-4 text-info" aria-hidden="true"></i>
+              </button>
+
+            <!-- Include the shared modal template -->
+            
+        </div>
         <div class="logout">
             {% if user.profile_image %}
-            <img src="{{ user.profile_image.url }}" style="width: 35px; height:35px; border-radius: 50%;" alt="">
+            <a class="" href="/employeeUpdate/{{user.id}}">
+                <img src="{{ user.profile_image.url }}" style="width: 35px; height:35px; border-radius: 50%;" alt="">
+            </a>
             {%endif%}
             <button class="btn"><a href="/logout"><i class="fa fa-power-off text-white" aria-hidden="true"></i></a></button>
         </div>

@@ -18,7 +18,7 @@
                                     aria-hidden="true"></i> نوعیت ویزا</p>
                             <select class="form-select" id="visaType" name="visaType_txt" aria-label="Default select example">
                                 {% for item in visatype %}
-                                    <option value="{{item.id}}">{{item.country}} {{item.duration}} </option>
+                                    <option value="{{item.id}}">{{item.country}} {{item.type}} </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -33,19 +33,9 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa text-danger px-2 fa-inbox" aria-hidden="true"></i> اسناد دریافت شده</p>
-                            <input type="text" name="recivedDoc_txt" class="form-control">
+                            <input type="text" name="recivedDoc_txt" class="form-control" value="پاسپورت">
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
-                            <p class="text-dark m-1">
-                                <i class="fa fa-user-plus text-danger px-2" aria-hidden="true"></i>
-                                </i>معرف
-                            </p>
-                            <select class="form-select" name="employee_txt" id="emp" aria-label="Default select example">
-                                {% for item in employees %}
-                                    <option value="{{item.id}}"> {{item.admin}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                        
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa fa-paper-plane text-danger px-2" aria-hidden="true"></i> آدرس بلاک</p>
                             <input type="text" name="blockAddress_txt" class="form-control">
@@ -56,7 +46,7 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> مقدار پرداخت</p>
-                            <input type="text" name="payed_txt" class="form-control">
+                            <input type="text" name="payed_txt" class="form-control" required>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa fa-envelope text-danger px-2" aria-hidden="true"></i> ایمیل ثبت</p>
@@ -69,7 +59,7 @@
 
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> قیمت ویزا</p>
-                            <input type="text" name="price_txt" class="form-control">
+                            <input type="text" name="price_txt" class="form-control"required>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa fa-money text-danger px-2" aria-hidden="true"></i> نوعیت پول</p>
