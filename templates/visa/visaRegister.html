@@ -17,23 +17,19 @@
                             <p class="text-dark m-1"><i class="fa fa-id-card text-danger px-2"
                                     aria-hidden="true"></i> نوعیت ویزا</p>
                             <select class="form-select" id="visaType" name="visaType_txt" aria-label="Default select example">
-                                {% for item in visatype %}
-                                    <option value="{{item.id}}">{{item.country}} {{item.type}} </option>
-                                {% endfor %}
+                                <option value="{{bcv.bill.visatype.id}}">{{bcv.bill.visatype.country}} {{bcv.bill.visatype.type}} </option>
                             </select>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa fa-user text-danger px-2"
                                     aria-hidden="true"></i>مشتری</p>
                             <select class="form-select" id="emp" name="customer_txt" aria-label="Default select example">
-                                {% for item in customers %}
-                                    <option value="{{item.id}}">{{item.name}} {{item.lastname}}</option>
-                                {% endfor %}
+                                <option value="{{bcv.customer.id}}">{{bcv.customer.name}} {{bcv.customer.lastname}}</option>
                             </select>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa text-danger px-2 fa-inbox" aria-hidden="true"></i> اسناد دریافت شده</p>
-                            <input type="text" name="recivedDoc_txt" class="form-control" value="پاسپورت">
+                            <input type="text" name="recivedDoc_txt" class="form-control" value="{{bcv.bill.reciveddoc}}">
                         </div>
                         
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
@@ -45,8 +41,8 @@
                             <input type='file' name="block_img" class="form-control">
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
-                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> مقدار پرداخت</p>
-                            <input type="text" name="payed_txt" class="form-control" required>
+                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> قیمت ویزا</p>
+                            <input type="text" name="price_txt" class="form-control" value="{{bcv.bill.price}}" required>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa fa-envelope text-danger px-2" aria-hidden="true"></i> ایمیل ثبت</p>
@@ -57,16 +53,15 @@
                             </select>
                         </div>
 
+                       
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
-                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> قیمت ویزا</p>
-                            <input type="text" name="price_txt" class="form-control"required>
+                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> مقدار پرداخت</p>
+                            <input type="text" name="payed_txt" class="form-control" value="{{bcv.bill.payed}}" required>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa fa-money text-danger px-2" aria-hidden="true"></i> نوعیت پول</p>
                             <select class="form-select" id="emailBy" name="money_txt" aria-label="Default select example">
-                                {% for item in money %}
-                                    <option value="{{item.id}}">{{item.money_type}} </option>
-                                {% endfor %}
+                                <option value="{{bcv.bill.money.id}}">{{bcv.bill.money.money_type}} </option>
                             </select>
                         </div>
 

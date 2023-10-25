@@ -34,7 +34,25 @@ function printPdf(pdfUrl) {
   };
 }
 
-var today = new Date();
-var formattedDate = today.toISOString().substring(0, 10);
-document.getElementsByName('date_txt')[0].value = formattedDate;
 
+var today = new Date();
+var day = today.getDate();
+var month = today.getMonth() + 1; // Adding 1 to get the correct month (0 - 11)
+var year = today.getFullYear();
+
+// Pad day and month with leading zeros if needed
+if (day < 10) {
+  day = "0" + day;
+}
+
+if (month < 10) {
+  month = "0" + month;
+}
+
+var formattedDate = day + "/" + month + "/" + year;
+console.log(formattedDate);
+
+var dateParts = formattedDate.split("/");
+var formattedValue = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+
+document.getElementsByName("date_txt")[0].value = formattedValue;

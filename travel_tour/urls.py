@@ -9,9 +9,9 @@ urlpatterns =[
     path('addPayment', addPayment, name='addPayment'),
     path('paymentList', paymentList, name='paymentList'),
     path('paymentUpdate<int:pay_id>/', paymentUpdate, name='paymentUpdate'),
-    path('customerRegister',customerRegister, name='customerRegister'),
+    path('customerRegister/<int:bill_id>/<str:passport_id>/',customerRegister, name='customerRegister'),
     path('customerList',customerList, name='customerList'),
-    path('visaRegister',visaRegister, name= 'visaRegister'),
+    path('visaRegister/<int:bcv_id>',visaRegister, name= 'visaRegister'),
     path('visaList',visaList,name='visaList'),
     path('visaView/<int:visa_id>/',visaView,name='visaView'),
     path('visaUpdate/<int:visa_id>/',visaUpdate,name='visaUpdate'),
@@ -27,7 +27,13 @@ urlpatterns =[
     path('employeeUpdate/<int:user_id>/', employeeUpdate, name = 'employeeUpdate'),
     path('notes',notes,name = 'notes'),
     path('monayUpdate/', moneyUpdate, name='moneyUpdate'),
-    
+    path('billCustomer/',billCustomer,name = 'billCustomer'),
+    path('billVisa/', billVisa, name='billVisa'),
+    path('crTrue/<int:bill_id>/<str:passport_id>/', crTrue, name='crTrue'),
+    path('cvTrue/', cvTrue, name='cvTrue'),
+    path('saveBill/<int:bill_id>/',saveBill,name='saveBill'),
+    path("billListing", billListing, name="billListing")
+
     # path('', home_page),
 
  

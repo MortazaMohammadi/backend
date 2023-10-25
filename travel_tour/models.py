@@ -117,6 +117,8 @@ class Bill(models.Model):
     money = models.ForeignKey(Money, on_delete=models.CASCADE)
     duration = models.IntegerField(null=True)
     isdone = models.BooleanField(default=False)
+    cr = models.BooleanField(default=False)
+    cv = models.BooleanField(default=False)
     def __str__(self):
         return str(self.name)
 
@@ -133,6 +135,7 @@ class Visa(models.Model):
     saveddate = models.DateField(auto_now=True)
     price = models.FloatField()
     money = models.ForeignKey(Money, on_delete=models.CASCADE)
+    bill = models.ForeignKey(Bill,on_delete=models.CASCADE,null=True)
 
 
 class registerPayed(models.Model):
@@ -168,3 +171,7 @@ class Notes(models.Model):
     date = models.DateField(auto_now_add=True)
     
 # Create your models here.
+class BCV(models.Model):
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, null= True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null= True)
+    visa = models.ForeignKey(Visa, on_delete=models.CASCADE, null= True) 

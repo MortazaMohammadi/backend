@@ -4,12 +4,12 @@
 {% block content %}
 <div class="body p-5 mt-3">
     <div class="text-center">
-        <div class="detial">
+        <!-- <div class="detial">
             <div class="title_bar fw-bold fs-2 sub-bg text-white">
                 بل 
             </div>
-        </div>
-         <form action="#" method="post">
+        </div> -->
+         <!-- <form action="#" method="post">
                 {% csrf_token %}
                 <div class="row m-0 text-start">
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
@@ -56,11 +56,11 @@
                         <button type="submit" class="btn btn-info mt-3 w-100 fw-bold" >ذخیره</button>
                     </div>
                 </div>
-            </form>
+            </form> -->
         </div>
         <div class="list sub-bg" id="list">
             <div class="title_bar fw-bold fs-2 mt-5 text-light text-center">
-                لیست بل ها
+                لیست بل ها ثبت شده
             </div>
               <table class="table table-light fw-bold">
                 <thead >
@@ -68,37 +68,34 @@
                     <th scope="col">#</th>
                     <th scope="col"> نام</th>
                     <th scope="col"> عنوان</th>
+                    <th scope="col">قیمت</th>
+                    <th scope="col">مقدار پرداخت</th>
+                    <th scope="col">مقدار باقی</th>
                     <th scope="col">پرنت </th>
                     <th scope="col">ویرایش </th>
-                    <th scope="col"> ثبت بل</th>
-                    <th scope="col">ثبت ویزا</th>
                     <th scope="col">حذف</th>
                   </tr>
                 </thead>
                 <tbody>
-                 {% for items in billListing%}
+                 {% for items in records%}
                  <tr>
-                    <th scope="row">{{ items.id }}</th>
-                    <td>{{ items.name }}</td>
-                    
-                    {% if items.visatype %}
-                    <td>{{ items.visatype.country }} {{items.visatype.type}}</td>
-                    {% else %}
-                    <td>{{ items.othertype.title }}</td>
-                    {% endif %}
-                        
-                    <td><a href="billprint/{{items.id}}" onclick="printPdf('billprint/{{items.id}}'); return false;" class="btn btn-info w-100">یرنت</a></td>
-                    <td><a href="updateBill/{{items.id}}" class="btn btn-primary w-100">ویرایش</a></td>
-                    <td> <a href="saveBill/{{items.id}}" class="btn btn-success w-100">ثبت بل</a></td>
-                    <td> <a href="sendBill/{{items.id}}" class="btn btn-success w-100">ثبت ویزا</a></td>
+                    <th scope="row">{{ items.zero }}</th>
+                    <td>{{ items.one }}</td>
+                    <td>{{ items.two }}</td>
+                    <th scope="col">{{items.three}}</th>
+                    <th scope="col">{{items.four}}</th>
+                    <th scope="col">{{items.five}}</th>                        
+                    <td><a href="billprint/{{items.zero}}" onclick="printPdf('billprint/{{items.zero}}'); return false;" class="btn btn-info w-100">یرنت</a></td>
+                    <td><a href="updateBill/{{items.zero}}" class="btn btn-primary w-100">ویرایش</a></td>
+
                     <td> <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal"
-                        data-bs-target="#confirmationModal-{{ items.id }}">
+                        data-bs-target="#confirmationModal-{{ items.zero }}">
                         حذف
                     </button>
                     </td>
                   </tr> 
                    <!-- Confirmation Modal -->
-                   <div class="modal fade" id="confirmationModal-{{ items.id }}" tabindex="-1"
+                   <div class="modal fade" id="confirmationModal-{{ items.zero }}" tabindex="-1"
                    aria-labelledby="confirmationModalLabel" aria-hidden="true">
                    <div class="modal-dialog">
                        <div class="modal-content">
@@ -113,7 +110,7 @@
                            <div class="modal-footer">
                                <button type="button" class="btn btn-secondary"
                                    data-bs-dismiss="modal">انصراف</button>
-                               <a href="deleteBill/{{items.id}}" class="btn btn-danger">تأیید حذف</a>
+                               <a href="deleteBill/{{items.zero}}" class="btn btn-danger">تأیید حذف</a>
                            </div>
                        </div>
                    </div>
@@ -124,6 +121,76 @@
                 
               </table>
         </div>
+        <div class="detial mt-5">
+            <div class="title_bar fw-bold fs-2 sub-bg text-white text-center">
+              آمار مالی بل های ثبت نام ها
+            </div>
+           
+            <div class="search_filter p-4" style="background-color: aquamarine;">
+                <div class="row m-0">
+                 
+                  <div class="col-9 mt-2">
+                    <p class="text-dark m-1 fw-bold"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>فیصدی
+                      کلی</p>
+                  </div>
+                  <div class="col-3 mt-2">
+                    <p class="text-dark m-1 fw-bold"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>مجموعه
+                      کلی</p>
+                    </div>
+                  <div class="col-9 mt-2">
+                    <div class=' bg-light  mt-2 text-center' style="width: 100%; border-radius:10px">
+                      <div class=' bg-warning py-1 mt-2 text-center' style="width: 100%; border-radius:10px">100%</div>
+                    </div>
+                  </div>
+                  <div class="col-3 mt-2">
+                    <div class='text-dark py-1 mt-2 text-center border border-warning' style="width: 100%; border-radius:10px">{{totalprice}}</div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="row m-0 bg-light mt-3 ">
+              <div class="col-3 sub-bg text-light p-2 fw-bold" style="border: 1px solid grey;">عنوان</div>
+              <div class="col-7 sub-bg text-light p-2 fw-bold" style="border: 1px solid grey;">فیصدی</div>
+              <div class="col-2 sub-bg text-light p-2 fw-bold" style="border: 1px solid grey;">مقدار</div>
+           
+              <div class="row m-0 p-0">
+                  <div class="col-3 text-dark p-2 fw-bold" style="border: 1px solid grey;">مجموعه پرداختی مشتری</div>
+      
+                  <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
+                    <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
+                      <div class="m-0 bg-warning" style="width: {{totalpayedper}}%; border-raduis:5px;">{{totalpayedper}}</div>
+                    </div>
+                  </div>
+                  <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{totalpayed}}</div>
+              </div>
+      
+              <div class="row m-0 p-0">
+                  <div class="col-3 text-dark p-2 fw-bold" style="border: 1px solid grey;">مجموعه باقیات مشتری</div>
+      
+                  <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
+                    <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
+                      <div class="m-0 bg-warning" style="width: {{totalremainper}}%; border-raduis:5px;">{{totalremainper}}</div>
+                    </div>
+                  </div>
+                  <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{totalremain}}</div>
+              </div>
+              
+              
+              <div class="row m-0 p-0">
+                  <div class="col-3 text-dark p-2 fw-bold" style="border: 1px solid grey;">مجموعه مفاد تا به حال</div>
+      
+                  <div class="col-7 text-dark p-2 fw-bold" style="border: 1px solid grey;">
+                    <div class="m-0 bg-secondary" style="width: 100%; border-radius:5px;">
+                      <div class="m-0 bg-warning" style="width: {{totalpayedper}}%; border-raduis:5px;">{{totalpayedper}}%</div>
+                    </div>
+                  </div>
+                  <div class="col-2 text-dark p-2 fw-bold" style="border: 1px solid grey;">{{totalpayed}}</div>
+              </div>
+      
+           
+            
+            </div>
+          </div>
     </div>
     
 </div>

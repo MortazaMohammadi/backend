@@ -55,7 +55,7 @@ def addPayment(request):
         context['ptype'] = mod.Payment_type.objects.all()
         context['page'] = 'اضافه مصرف'
         context['list'] = mod.Payment.objects.all()
-        context['addpay'] = ' text-warning sub-bg '
+        context['addpay'] = ' text-warning sub-bg ps-3'
         return render(request, 'office/addPayment.html',context)
 
 # payment list and static for payment
@@ -96,12 +96,14 @@ def paymentList(request):
             context['eachptype'] = l1
             context['paytype'] = mod.Payment_type.objects.all()
     context['page'] = 'لیست مصارف'
-    context['listpay'] = ' text-warning sub-bg '
+    context['listpay'] = ' text-warning sub-bg ps-3'
     return render(request, 'office/paymentList.html',context)
 
 # Customer Registeration
 @login_required(login_url='/')
-def customerRegister(request):
+def customerRegister(request, bill_id,passport_id):
+    bill = mod.Bill.objects.get(id = bill_id)
+    
     if request.method == 'POST':
         name = request.POST.get('name_txt')
         lastname = request.POST.get('lastname_txt')
@@ -133,17 +135,78 @@ def customerRegister(request):
             passportImage=passport_image
         )
         customer.save()  # Save the customer object to the database
-
-        return redirect('/customerRegister')  # Redirect to a success page
+        
+        bcv = mod.BCV(
+            bill = bill,
+            customer = customer
+        )
+        bcv.save()
+        bill.cr = True
+        bill.save()
+        return redirect('/billCustomer')  # Redirect to a success page
     
     money = mod.Money.objects.all()
-    return render(request, 'visa/customerRegister.html', {'page': 'راجستر مشتری','cusregister':' text-warning sub-bg ','money' : money})
+    return render(request, 'visa/customerRegister.html', {'page': 'راجستر مشتری','cusregister':' text-warning sub-bg ps-3','money' : money,'bill':bill,'passport':passport_id})
 
 
-# visa registeration page
-@login_required(login_url='/')
-def visaRegister(request):
+def billCustomer(request):
     context = {}
+    bill = mod.Bill.objects.filter(isdone = True, cr = False)
+    context['bill'] = bill
+    context['page'] = 'راجستر مشتری'
+    context['cusregister'] = ' text-warning sub-bg ps-3'
+    return render(request,'visa/bill_customer.html',context)
+
+
+def crTrue(request,bill_id,passport_id):
+    bill = mod.Bill.objects.get(id = bill_id)
+    try:
+         customer = mod.Customer.objects.get(passport = passport_id)
+    except:
+         
+         return redirect('/customerRegister/'+ str(bill_id) +'/'+str(passport_id))
+    bill.cr = True
+    bill.save()
+    bcv = mod.BCV(
+        bill = bill,
+        customer = customer
+    )
+    bcv.save()
+    return redirect('/billCustomer')
+
+
+def deletbcv(request,bcv_id):
+    bcv = ''
+    
+
+def cvTrue(request,bill_id):
+    bill = mod.Bill.get(id = bill_id)
+    bill.cv = True
+    bill.save()
+    return redirect('#')
+
+
+def billVisa(request):
+    context = {}
+    records = mod.BCV.objects.filter(visa = None)
+    context['records'] = records
+    context['page'] = 'راجستر ویزا'
+    context['visaregister'] = ' text-warning sub-bg ps-3'
+    return render(request,'visa/bill_visa.html',context)
+
+
+def saveBill(request,bill_id):
+    bill = mod.Bill.objects.get(id = bill_id)
+    bill.isdone = True
+    bill.cr = True
+    bill.save()
+    return redirect('/bill')
+# visa registeration page
+
+@login_required(login_url='/')
+def visaRegister(request,bcv_id):
+    context = {}
+    bcv = mod.BCV.objects.get(id = bcv_id)
     if request.method == 'POST':
         visaType = request.POST.get('visaType_txt')
         customer = request.POST.get('customer_txt')
@@ -175,7 +238,8 @@ def visaRegister(request):
             employee = employee,
             emailby = dbemailBy,
             money = dbmoney,
-            price = price
+            price = price,
+            bcv = bcv.bill
         )
         reciveddoc = mod.VisaRecivedDoc(
             visa = visa,
@@ -190,15 +254,14 @@ def visaRegister(request):
         visa.save()
         reciveddoc.save()
         visaPayment.save()
-        return redirect('/visaRegister')   
- 
-    context['money'] = mod.Money.objects.all()
+        bcv.visa = visa
+        bcv.save()
+        return redirect('/billVisa')   
     context['money'] = mod.Money.objects.all()
     context['emailby'] = mod.OurEmail.objects.all()
-    context['customers'] = mod.Customer.objects.all().reverse()
-    context['visatype'] = mod.VisaType.objects.all()
     context['page'] = 'راجستر ویزا'
-    context['visaregister'] = ' text-warning sub-bg '
+    context['visaregister'] = ' text-warning sub-bg ps-3'
+    context['bcv'] = bcv
     return render(request, 'visa/visaRegister.html',context)
 
 # visa list
@@ -218,7 +281,7 @@ def visaList(request):
     
     context['money'] = mod.Money.objects.all()
     context['visalisting'] = mod.Visa.objects.all()
-    context['visaList'] = 'text-warning sub-bg'
+    context['visaList'] = ' text-warning sub-bg ps-3'
     context['page'] = 'لیست ویزا'
     return render(request, 'visa/visaList.html', context)
 
@@ -260,7 +323,7 @@ def bill(request):
         return redirect('/bill#list')
     else:
         pass
-    context['bill'] = 'text-warning sub-bg'
+    context['bill'] = ' text-warning sub-bg ps-3'
     context['page'] = 'راجستر بل'
     context['billListing'] = mod.Bill.objects.filter(isdone = False)
     context['visaList'] = mod.VisaType.objects.all()
@@ -288,7 +351,13 @@ def deleteBill(request, bill_id):
 # bill send for register
 @login_required(login_url='/')
 def sendBill(request, bill_id):
-    mod.Bill.objects.get(id = bill_id).isdone = True
+    bill = mod.Bill.objects.get(id = bill_id)
+    bill.isdone = True
+    bill.save()
+    bcv = mod.BCV(
+        bill = bill
+    )
+    bcv.save
     return redirect('/bill#list')
 
 # bill update
@@ -339,22 +408,17 @@ def visaView(request, visa_id):
     context['money'] = mod.Money.objects.all()
     return render(request, 'visa/visaView.html', context)
 
-
 # payment update
 @login_required(login_url='/')
 def paymentUpdate(request, pay_id):
     context = {'page' : 'آمار مصرف'}
     return render(request, 'office/paymentUpdate', context)
 
-
 # customer list
 @login_required(login_url='/')
 def customerList(request):
     context= {'page': 'لیست مشتریان'}
     return render(request, 'visa/customerList.html', context)
-
-
-# visa list update cancel save payed approved search engine
 
 # visa update 
 @login_required(login_url='/')
@@ -604,7 +668,7 @@ def visaStatistic(request):
     except:
          return HttpResponseNotFound('<h1 style = "text-align: center"> هیچ ویزای وجود ندارد </h1>')
     context['vtype'] = mod.VisaType.objects.all()
-    context['visastatistic'] = ' text-warning sub-bg '
+    context['visastatistic'] = ' text-warning sub-bg ps-3'
     return render(request,'visa/visastatistic.html',context)
 
 # employee register
@@ -740,7 +804,7 @@ def notes(request):
         )
         note.save()
         return redirect('notes')
-    context['notes'] = 'text-warning sub-bg'
+    context['notes'] = ' text-warning sub-bg ps-3'
     context['records'] = mod.Notes.objects.all()
     return render(request, 'note/notes.html',context)
 
@@ -757,12 +821,11 @@ def moneychange(amount,type, totype):
         othercurency = afghani * totype1.amount/ totype1.sell_amount
     return round(othercurency,3)
 
-
 # profile update
 from django.contrib import messages
-def employeeUpdate(request,user_id):
-    context['money'] = mod.Money.objects.all()
+def employeeUpdate(request,user_id):  
     context = {}
+    context['money'] = mod.Money.objects.all()
     customuser = mod.CustomUser.objects.get(id = user_id)
     myuser = None
     
@@ -824,7 +887,6 @@ def employeeUpdate(request,user_id):
     context['page'] = 'آپدیت کارمند'
     return render(request, 'account/employee_update.html',context)
 
-
 # money update
 def moneyUpdate(request):
     if request.method == 'POST':
@@ -842,4 +904,37 @@ def moneyUpdate(request):
         # Redirect the user or render a success template
         return redirect('/bill')  # Assuming you have a success URL name
 
+def billListing(request):
+    context = {}
+    records = mod.Bill.objects.filter(visatype=None, cr=True)
+    myrecords = []
+    totalprice = 0
+    totalpayed = 0
+    totalremain = 0
+    for record in records:
+        reco = {}
+        reco['zero'] = record.id
+        reco['one'] = record.name
+        reco['two'] = record.othertype.title
+        reco['three'] = record.price
+        reco['four'] = record.payed
+        remaining_amount = record.price - record.payed
+        reco['five'] = remaining_amount
+        reco['money'] = record.money.money_type
+        myrecords.append(reco)
+        totalprice += record.price
+        totalpayed += record.payed
+        totalremain += remaining_amount
+    context['records'] = myrecords
+    context["totalprice"] = totalprice
+    context['totalpayed'] = totalpayed
+    context['totalremain'] = totalremain
+    context["totalpriceper"] = 100 
+    if totalprice > 0:
+        context['totalpayedper'] = round( totalpayed * 100 / totalprice,2)
+        context['totalremainper'] = round(totalremain * 100 / totalprice,2)
+    context['page'] = 'بل های ثبت شده'
+    context['billlisting'] = ' text-warning sub-bg ps-3'
+    return render(request, 'billing/billlisting.html', context)
 
+    
