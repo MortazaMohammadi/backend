@@ -67,10 +67,11 @@
                             
                             var inputValue = inputField.value;
                             if (inputValue == '') {
-                                inputValue = 'P0';
+                                inputValue = 'p0';
                             }
                             var currentHref = link.getAttribute("href");
-                            link.setAttribute("href", currentHref + inputValue);
+                            link.setAttribute("href", currentHref + inputValue.toUpperCase());
+                            inputField.value = ''
                             
                         }
                     </script>

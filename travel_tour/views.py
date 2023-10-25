@@ -129,7 +129,7 @@ def customerRegister(request, bill_id,passport_id):
             address=address,
             mainstate=mainstate,
             currentstate=currentstate,
-            passport=passport,
+            passport=passport.upper(),
             profile=profile_image,
             cardImage=card_image,
             passportImage=passport_image
@@ -272,7 +272,7 @@ def visaList(request):
         
         if passport_txt:
             try:
-                customer = mod.Customer.objects.get(passport=passport_txt)
+                customer = mod.Customer.objects.get(passport=passport_txt.upper())
                 context['visalisting'] = mod.Visa.objects.filter(customer=customer)
             except mod.Customer.DoesNotExist:
                 pass
