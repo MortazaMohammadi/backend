@@ -105,6 +105,7 @@ class VisaType(models.Model):
 
 class otherbill(models.Model):
     title = models.CharField(max_length=50)
+    price = models.FloatField(default=0)
     
 class Bill(models.Model):
     name = models.CharField(max_length=50)
@@ -119,6 +120,7 @@ class Bill(models.Model):
     isdone = models.BooleanField(default=False)
     cr = models.BooleanField(default=False)
     cv = models.BooleanField(default=False)
+    mainprice = models.FloatField(default=0)
     def __str__(self):
         return str(self.name)
 

@@ -197,9 +197,12 @@ def billVisa(request):
 
 def saveBill(request,bill_id):
     bill = mod.Bill.objects.get(id = bill_id)
+    otherprice = mod.otherbill.objects.get(id = bill.othertype.id)
+    bill.mainprice = otherprice.price
     bill.isdone = True
     bill.cr = True
     bill.save()
+    
     return redirect('/bill')
 # visa registeration page
 
@@ -911,6 +914,7 @@ def billListing(request):
     totalprice = 0
     totalpayed = 0
     totalremain = 0
+    totalmafad = 0
     for record in records:
         reco = {}
         reco['zero'] = record.id
@@ -922,19 +926,43 @@ def billListing(request):
         reco['five'] = remaining_amount
         reco['money'] = record.money.money_type
         myrecords.append(reco)
-        totalprice += record.price
-        totalpayed += record.payed
-        totalremain += remaining_amount
+        totalprice += moneychange(record.price,record.money,'افغانی')
+        totalpayed += moneychange(record.payed,record.money,'افغانی')
+        totalremain += moneychange(remaining_amount,record.money,'افغانی')
+        mafad  = record.payed - record.mainprice
+        totalmafad += moneychange(mafad,record.money,'افغانی')
     context['records'] = myrecords
     context["totalprice"] = totalprice
     context['totalpayed'] = totalpayed
     context['totalremain'] = totalremain
+    if totalmafad < 0:
+        context['mafadcolor'] = 'bg-danger'
+    else:
+        context['mafadcolor'] = 'bg-warning'
+    context['totalmafad'] = totalmafad
     context["totalpriceper"] = 100 
     if totalprice > 0:
         context['totalpayedper'] = round( totalpayed * 100 / totalprice,2)
         context['totalremainper'] = round(totalremain * 100 / totalprice,2)
+        context['totalmafadper'] = abs(round(totalmafad * 100 / totalprice,2))
+    
     context['page'] = 'بل های ثبت شده'
     context['billlisting'] = ' text-warning sub-bg ps-3'
     return render(request, 'billing/billlisting.html', context)
 
-    
+
+def totalstatistics(request):
+    totalOfficePayement =  mod.Payment.objects.aggregate(total_amount=Sum('amount'))['total_amount']  #np
+    otherBillPayeds = mod.Bill.objects.filter(visatype = None )
+    sumOtherBillPayeds = 0
+    sumOtherBillPrice = 0
+    sumOtherBillMainPrice = 0
+    for item in otherBillPayeds:
+        sumOtherBillPayeds += moneychange(item.payed,item.money,'افغانی')
+        sumOtherBillPrice += moneychange(item.price,item.money,'افغانی')
+        sumOtherBillMainPrice += moneychange(item.mainprice,item.money,'افغانی')
+    # totalOfOtherbillpayed = mod.Bill.objects.filter(visatype=None).aggregate(total_bill_payed=Sum("payed"))['total_bill_payed'] #p    
+    # totalOfOtherbillprice = mod.Bill.objects.filter(visatype=None).aggregate(total_bill_price =Sum("price"))['total_bill_price'] #p
+    # totalOfOtherbillremains = totalOfOtherbillprice - totalOfOt
+
+    return HttpResponseNotFound(sumOtherBillPayeds,sumOtherBillPrice)

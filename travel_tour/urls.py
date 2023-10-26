@@ -32,7 +32,8 @@ urlpatterns =[
     path('crTrue/<int:bill_id>/<str:passport_id>/', crTrue, name='crTrue'),
     path('cvTrue/', cvTrue, name='cvTrue'),
     path('saveBill/<int:bill_id>/',saveBill,name='saveBill'),
-    path("billListing", billListing, name="billListing")
+    path("billListing", billListing, name="billListing"),
+    path('totalstatistics', totalstatistics, name = 'totalstatistics')
 
     # path('', home_page),
 
