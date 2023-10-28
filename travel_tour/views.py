@@ -961,8 +961,35 @@ def totalstatistics(request):
         sumOtherBillPayeds += moneychange(item.payed,item.money,'افغانی')
         sumOtherBillPrice += moneychange(item.price,item.money,'افغانی')
         sumOtherBillMainPrice += moneychange(item.mainprice,item.money,'افغانی')
-    # totalOfOtherbillpayed = mod.Bill.objects.filter(visatype=None).aggregate(total_bill_payed=Sum("payed"))['total_bill_payed'] #p    
-    # totalOfOtherbillprice = mod.Bill.objects.filter(visatype=None).aggregate(total_bill_price =Sum("price"))['total_bill_price'] #p
-    # totalOfOtherbillremains = totalOfOtherbillprice - totalOfOt
-
-    return HttpResponseNotFound(sumOtherBillPayeds,sumOtherBillPrice)
+    totalOfVisas = mod.Visa.objects.all()
+    sumVisaPrice = 0
+    sumVisaPayed = 0
+    sumVisaMainprice = 0
+    for items in totalOfVisas:
+        sumVisaPrice += moneychange(items.price,items.money,'افغانی')
+        payment = mod.visaPayment.objects.get(visa = items.id)
+        sumVisaPayed += moneychange(payment.payed,items.money,'افغانی')
+        try:
+            mainprice = mod.registerPayed.objects.get(id =items.id ).payed
+        except:
+            mainprice = 0
+        sumVisaMainprice  += mainprice
+    context = {}
+    
+    context['money'] = mod.Money.objects.all()
+    if request.method == 'GET':
+ 
+        mmoney = request.GET.get('money_txt')
+        if mmoney == None:
+            mmoney = 1
+        mymoney = mod.Money.objects.get(id = mmoney)
+        money = mod.Money.objects.get(id = 3)
+        context['Vtotalprice'] = round(moneychange(sumVisaPrice,money,mymoney.money_type),2)
+        context['Vtotalpayed'] = round(moneychange(sumVisaPayed,money,mymoney.money_type),2)
+        context['Vtotalmainprice'] = round(moneychange(sumVisaMainprice,money,mymoney.money_type),2)
+        context['totalpayprice'] = round(moneychange(totalOfficePayement,money,mymoney.money_type),2)
+        context['totalbillprice'] = round(moneychange(sumOtherBillPrice,money,mymoney.money_type),2)
+        context['totalbillpay'] = round(moneychange(sumOtherBillPayeds,money,mymoney.money_type),2)
+        context['totalbillmainprice'] = round(moneychange(sumOtherBillMainPrice,money,mymoney.money_type),2)
+    
+    return render(request,'amar/totalstatistic.html',context)
