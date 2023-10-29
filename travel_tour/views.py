@@ -960,7 +960,8 @@ def totalstatistics(request):
     for item in otherBillPayeds:
         sumOtherBillPayeds += moneychange(item.payed,item.money,'افغانی')
         sumOtherBillPrice += moneychange(item.price,item.money,'افغانی')
-        sumOtherBillMainPrice += moneychange(item.mainprice,item.money,'افغانی')
+        if item.payed > item.mainprice:
+            sumOtherBillMainPrice += moneychange(item.mainprice,item.money,'افغانی')
     totalOfVisas = mod.Visa.objects.all()
     sumVisaPrice = 0
     sumVisaPayed = 0
@@ -984,12 +985,37 @@ def totalstatistics(request):
             mmoney = 1
         mymoney = mod.Money.objects.get(id = mmoney)
         money = mod.Money.objects.get(id = 3)
+
         context['Vtotalprice'] = round(moneychange(sumVisaPrice,money,mymoney.money_type),2)
         context['Vtotalpayed'] = round(moneychange(sumVisaPayed,money,mymoney.money_type),2)
         context['Vtotalmainprice'] = round(moneychange(sumVisaMainprice,money,mymoney.money_type),2)
-        context['totalpayprice'] = round(moneychange(totalOfficePayement,money,mymoney.money_type),2)
+        context['totaloffpayment'] = round(moneychange(totalOfficePayement,money,mymoney.money_type),2)
         context['totalbillprice'] = round(moneychange(sumOtherBillPrice,money,mymoney.money_type),2)
         context['totalbillpay'] = round(moneychange(sumOtherBillPayeds,money,mymoney.money_type),2)
         context['totalbillmainprice'] = round(moneychange(sumOtherBillMainPrice,money,mymoney.money_type),2)
+
+        
+        context['TotalCuneedpayed'] = round(context['Vtotalprice'] + context['totalbillprice'],2)
+        context['TotalOFFneedpayed'] = round(context['totalbillmainprice'] + context['Vtotalmainprice'] + context['totaloffpayment'],2)
+        context['TotalCupayed'] = round(context['Vtotalpayed'] + context['totalbillpay'],2)
+        
+        context['perCuNeedpayed'] = 100
+        context['perOffNeedpayed'] = round(context['TotalOFFneedpayed'] * 100 / context['TotalCuneedpayed'],2)
+        context['perCupayed'] = round(context['TotalCupayed'] * 100 / context['TotalCuneedpayed'],2)
+                
+                
+        
+        context['perVprice'] = round(context['Vtotalprice'] * 100 / context['TotalCuneedpayed'],2) 
+        context['perVpayed'] = round(context['Vtotalpayed'] * 100 / context['TotalCuneedpayed'],2)
+        context['perVmainprice'] = round(context['Vtotalmainprice'] * 100 / context['TotalCuneedpayed'],2)
+        context['peroffpayment'] = round(context['totaloffpayment'] * 100 / context['TotalCuneedpayed'],2)
+        context['perbillprice'] = round(context['totalbillprice'] * 100 / context['TotalCuneedpayed'],2)
+        context['perbillpay'] = round(context['totalbillpay'] * 100 / context['TotalCuneedpayed'],2)
+        context['perbillmainprice'] = round(context['totalbillmainprice'] * 100 / context['TotalCuneedpayed'],2)
+
+        context['mymoney'] = mymoney
+        
     
+    context['page'] = 'آمار کلی'
+    context['totalstatisticcolor'] = 'sub-bg text-warning'
     return render(request,'amar/totalstatistic.html',context)
