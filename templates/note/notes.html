@@ -52,6 +52,33 @@
             <div class="title_bar fw-bold fs-2 mt-5 text-light">
                 لیست یاداشت ها 
             </div>
+            <div class="search_filter main-bg p-4">
+                <form action="" name="listSearchform" method="get">
+                  {% csrf_token %}
+                  <div class="row m-0">
+                    
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" placeholder="نام، موضوع یا مقدار" name="any_txt" >
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-12">
+                      <select class="form-select" id="emailBy" name="type_txt" aria-label="Default select example">
+                        <option value="همه">همه</option>
+                        <option value="پرداخت">پرداخت</option>
+                        <option value="دریافت">دریافت </option>
+                        
+                      </select>
+        
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-3 col-12">
+                      <button type="submit" class="btn btn-info sub-bg text-light w-100"><i class="fa fa-search px-2"
+                          aria-hidden="true"></i>
+                        جستجو</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
               <table class="table table-light">
                 <thead>
                   <tr>

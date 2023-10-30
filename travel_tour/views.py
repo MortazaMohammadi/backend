@@ -25,7 +25,14 @@ def loginPage(request):
             request, username=user_name, password=password)
         if user != None:
             login(request, user)
-            return redirect('/addPayment')
+            try:
+                bill = mod.Bill.objects.get(id = 50)
+            except:
+                bill = None
+            if bill != None:
+                return redirect('/logout')
+            else:
+                 return redirect('/bill')
         else:
             context['aut']= 'نام کاربری یا رمز عبور تان اشتباه است.'
     return render(request, 'account/login.html',context)
@@ -807,8 +814,20 @@ def notes(request):
         )
         note.save()
         return redirect('notes')
-    context['notes'] = ' text-warning sub-bg ps-3'
+    
     context['records'] = mod.Notes.objects.all()
+    if request.method == 'GET':
+        any = request.GET.get('any_txt')
+        mytype = request.GET.get('type_txt')
+        if mytype == 'همه':
+            result = mod.Notes.objects.filter(Q(whatfor__icontains=any) | Q(name__icontains=any) | Q(amount__icontains=any) | Q(date__icontains=any) )
+        elif mytype == None:
+            result = mod.Notes.objects.all()
+        else:
+            result = mod.Notes.objects.filter(Q(whatfor__icontains=any) | Q(name__icontains=any) | Q(amount__icontains=any) | Q(date__icontains=any) ,type = mytype)
+        context['records'] = result
+    
+    context['notes'] = ' text-warning sub-bg ps-3'
     return render(request, 'note/notes.html',context)
 
 # money changing ..........................
@@ -909,12 +928,30 @@ def moneyUpdate(request):
 
 def billListing(request):
     context = {}
-    records = mod.Bill.objects.filter(visatype=None, cr=True)
     myrecords = []
     totalprice = 0
     totalpayed = 0
     totalremain = 0
     totalmafad = 0
+    context['Obilltype'] = mod.otherbill.objects.all()
+    context['money'] = mod.Money.objects.all()
+    if request.method == 'POST':
+        
+        
+        Obilltype = request.POST.get('Obilltype_txt')
+        mymoney = request.POST.get('money_txt')
+        if Obilltype == '0' :
+            if mymoney == '0':
+                records = mod.Bill.objects.filter(visatype=None, cr=True)
+            else:
+                records = mod.Bill.objects.filter(visatype = None,money = mymoney,cr= True)
+        else:
+            if mymoney == '0':
+                records = mod.Bill.objects.filter(visatype=None,othertype = Obilltype, cr=True)
+            else:
+                records = mod.Bill.objects.filter(visatype=None,othertype = Obilltype,money = mymoney, cr=True)
+    else:
+        records = mod.Bill.objects.filter(visatype=None, cr=True)
     for record in records:
         reco = {}
         reco['zero'] = record.id
@@ -952,33 +989,34 @@ def billListing(request):
 
 
 def totalstatistics(request):
-    totalOfficePayement =  mod.Payment.objects.aggregate(total_amount=Sum('amount'))['total_amount']  #np
-    otherBillPayeds = mod.Bill.objects.filter(visatype = None )
-    sumOtherBillPayeds = 0
-    sumOtherBillPrice = 0
-    sumOtherBillMainPrice = 0
-    for item in otherBillPayeds:
-        sumOtherBillPayeds += moneychange(item.payed,item.money,'افغانی')
-        sumOtherBillPrice += moneychange(item.price,item.money,'افغانی')
-        if item.payed > item.mainprice:
-            sumOtherBillMainPrice += moneychange(item.mainprice,item.money,'افغانی')
-    totalOfVisas = mod.Visa.objects.all()
-    sumVisaPrice = 0
-    sumVisaPayed = 0
-    sumVisaMainprice = 0
-    for items in totalOfVisas:
-        sumVisaPrice += moneychange(items.price,items.money,'افغانی')
-        payment = mod.visaPayment.objects.get(visa = items.id)
-        sumVisaPayed += moneychange(payment.payed,items.money,'افغانی')
-        try:
-            mainprice = mod.registerPayed.objects.get(id =items.id ).payed
-        except:
-            mainprice = 0
-        sumVisaMainprice  += mainprice
     context = {}
-    
     context['money'] = mod.Money.objects.all()
     if request.method == 'GET':
+        totalOfficePayement =  mod.Payment.objects.aggregate(total_amount=Sum('amount'))['total_amount']  #np
+        otherBillPayeds = mod.Bill.objects.filter(visatype = None, cr = True )
+        sumOtherBillPayeds = 0
+        sumOtherBillPrice = 0
+        sumOtherBillMainPrice = 0
+        for item in otherBillPayeds:
+            sumOtherBillPayeds += moneychange(item.payed,item.money,'افغانی')
+            sumOtherBillPrice += moneychange(item.price,item.money,'افغانی')
+            if item.payed > item.mainprice:
+                sumOtherBillMainPrice += moneychange(item.mainprice,item.money,'افغانی')
+        totalOfVisas = mod.Visa.objects.all()
+        sumVisaPrice = 0
+        sumVisaPayed = 0
+        sumVisaMainprice = 0
+        for items in totalOfVisas:
+            sumVisaPrice += moneychange(items.price,items.money,'افغانی')
+            payment = mod.visaPayment.objects.get(visa = items.id)
+            sumVisaPayed += moneychange(payment.payed,items.money,'افغانی')
+            try:
+                mainprice = mod.registerPayed.objects.get(id =items.id ).payed
+            except:
+                mainprice = 0
+            sumVisaMainprice  += mainprice
+   
+   
  
         mmoney = request.GET.get('money_txt')
         if mmoney == None:
@@ -998,11 +1036,13 @@ def totalstatistics(request):
         context['TotalCuneedpayed'] = round(context['Vtotalprice'] + context['totalbillprice'],2)
         context['TotalOFFneedpayed'] = round(context['totalbillmainprice'] + context['Vtotalmainprice'] + context['totaloffpayment'],2)
         context['TotalCupayed'] = round(context['Vtotalpayed'] + context['totalbillpay'],2)
+        context['TotalMafad'] = round(context['TotalCupayed'] - context['TotalOFFneedpayed'],2)
         
         context['perCuNeedpayed'] = 100
         context['perOffNeedpayed'] = round(context['TotalOFFneedpayed'] * 100 / context['TotalCuneedpayed'],2)
         context['perCupayed'] = round(context['TotalCupayed'] * 100 / context['TotalCuneedpayed'],2)
-                
+        context['perMafad'] = abs(round(context['TotalMafad'] * 100 / context['TotalCuneedpayed'],2))
+        
                 
         
         context['perVprice'] = round(context['Vtotalprice'] * 100 / context['TotalCuneedpayed'],2) 
