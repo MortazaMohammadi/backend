@@ -31,6 +31,12 @@
                             {% endfor %}
                         </select>
                     </div>
+                    
+                    <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
+                        <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  تعداد اشخاص </p>
+                        <input type="number" class="form-control" name="people_txt" value="1" required>
+                    </div>
+
                      <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  قیمت</p>
                         <input type="number" class="form-control" name="price_txt" required >
@@ -51,6 +57,12 @@
                         <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  مدت اعتبار </p>
                         <input type="number" class="form-control" name="duration_txt" value="0" required>
                     </div>
+                    
+                    <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
+                        <p class="text-dark m-1"><i class="fa fa-phone text-danger px-2" aria-hidden="true"></i>  شماره تماس  </p>
+                        <input type="number" class="form-control" name="phone_txt" value="{{bill.phone}}" required>
+                    </div>
+                    
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="m-4"></p>
                         <button type="submit" class="btn btn-info mt-3 w-100 fw-bold" >ذخیره</button>

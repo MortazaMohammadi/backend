@@ -40,6 +40,9 @@
               نوع ویزا
             </div>
             <div class="col-lg-1 col-md-2 col-12 fw-bold">
+              پرنت بل
+            </div>
+            <div class="col-lg-1 col-md-2 col-12 fw-bold">
               برسی
             </div>
             <div class="col-lg-1 col-md-2 col-12 fw-bold">
@@ -74,7 +77,9 @@
               <div class="col-lg-2 col-md-2 col-12 ">
                 {{item.visaType.type}}
               </div>
-
+              <div class="col-lg-1 col-md-1 col-12 px-2">
+                <a href="billprint/{{item.bill.id}}" onclick="printPdf('billprint/{{item.bill.id}}'); return false;" class="btn btn-secondary w-100 p-0">یرنت</a>
+              </div>
               <div class="col-lg-1 col-md-1 col-12 px-2">
                 <a href="visaView/{{item.id}}" class=" w-100 p-0 btn btn-info">
                   برسی

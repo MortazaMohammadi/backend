@@ -158,7 +158,8 @@ def customerRegister(request, bill_id,passport_id):
 
 def billCustomer(request):
     context = {}
-    bill = mod.Bill.objects.filter(isdone = True, cr = False)
+    
+    bill = mod.Bill.objects.filter(isdone = True, cv = False)
     context['bill'] = bill
     context['page'] = 'راجستر مشتری'
     context['cusregister'] = ' text-warning sub-bg ps-3'
@@ -187,10 +188,10 @@ def deletbcv(request,bcv_id):
     
 
 def cvTrue(request,bill_id):
-    bill = mod.Bill.get(id = bill_id)
+    bill = mod.Bill.objects.get(id = bill_id)
     bill.cv = True
     bill.save()
-    return redirect('#')
+    return redirect('/billCustomer/')
 
 
 def billVisa(request):
@@ -208,6 +209,7 @@ def saveBill(request,bill_id):
     bill.mainprice = otherprice.price
     bill.isdone = True
     bill.cr = True
+    bill.cv = True
     bill.save()
     
     return redirect('/bill')
@@ -249,7 +251,7 @@ def visaRegister(request,bcv_id):
             emailby = dbemailBy,
             money = dbmoney,
             price = price,
-            bcv = bcv.bill
+            bill = bcv.bill
         )
         reciveddoc = mod.VisaRecivedDoc(
             visa = visa,
@@ -307,6 +309,8 @@ def bill(request):
         payed = request.POST.get('payed_txt')
         money = request.POST.get('money_txt')
         duration = request.POST.get('duration_txt')
+        peopleNo = request.POST.get('people_txt')
+        phone = request.POST.get('phone_txt')
         try:
             dbvisatype = mod.VisaType.objects.get(id= visatype)
         except:
@@ -327,7 +331,9 @@ def bill(request):
             price = price,
             payed = payed,
             money = dbmoney,
-            duration = duration
+            duration = duration,
+            peopleNo = peopleNo,
+            phone = phone
         )
         billing.save()
         return redirect('/bill#list')
@@ -382,6 +388,11 @@ def updateBill(request, bill_id):
         bill.price = request.POST.get('price_txt')
         bill.payed = request.POST.get('payed_txt')
         money = request.POST.get('money_txt')
+        bill.peopleNo = request.POST.get('people_txt')
+        mainprice = request.POST.get('mainprice_txt')
+        bill.phone = request.POST.get('phone_txt')
+      
+        
         try:
             bill.visatype = mod.VisaType.objects.get(id= visatype)
         except:
@@ -390,10 +401,15 @@ def updateBill(request, bill_id):
            bill.othertype =  mod.otherbill.objects.get(title = visatype) 
         except:
             bill.othertype = None
-        
+        if bill.visatype == None:
+            otherbill = mod.otherbill.objects.get(title = visatype)
+            otherbill.price = mainprice
+            otherbill.save()
+            bill.mainprice = mainprice
         bill.money = mod.Money.objects.get(id = money)
         bill.duration = request.POST.get('duration_txt')
         bill.save()
+        
         return redirect('/bill#list')
     else:
         context['bill'] = bill
@@ -546,6 +562,15 @@ def registerPayment(request,visa_id):
         if isapproved == 'on':
             visa.isapproved = True
             visa.isrejected = False
+            try:
+                visapdf = request.FILES['visapdf_file']
+            except:
+                pass
+            if visa.visapdf == None:
+                if visapdf in request.FILES:
+                    visa.visapdf = visapdf
+                else:
+                    pass
         else:
             visa.isapproved = False
             
@@ -951,7 +976,7 @@ def billListing(request):
             else:
                 records = mod.Bill.objects.filter(visatype=None,othertype = Obilltype,money = mymoney, cr=True)
     else:
-        records = mod.Bill.objects.filter(visatype=None, cr=True)
+       records = mod.Bill.objects.filter(visatype=None, cr=True).order_by('-id')
     for record in records:
         reco = {}
         reco['zero'] = record.id

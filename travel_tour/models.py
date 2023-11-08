@@ -123,8 +123,10 @@ class Bill(models.Model):
     cr = models.BooleanField(default=False)
     cv = models.BooleanField(default=False)
     mainprice = models.FloatField(default=0)
+    peopleNo = models.IntegerField(default = 1)
+    phone = models.CharField(default='07....', max_length=15)
     def __str__(self):
-        return str(self.name)
+        return str(self.name) + str(self.peopleNo)
 
 class Visa(models.Model):
     visaType = models.ForeignKey(VisaType, on_delete=models.CASCADE)
@@ -179,3 +181,4 @@ class BCV(models.Model):
     bill = models.ForeignKey(Bill, on_delete=models.CASCADE, null= True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null= True)
     visa = models.ForeignKey(Visa, on_delete=models.CASCADE, null= True) 
+    
