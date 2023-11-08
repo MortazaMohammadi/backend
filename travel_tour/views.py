@@ -364,6 +364,18 @@ def deleteBill(request, bill_id):
     mod.Bill.objects.get(id = bill_id).delete()
     return redirect('/bill#list')
 
+@login_required(login_url='/')
+def deactiveBill(request, bill_id):
+    bill = mod.Bill.objects.get(id = bill_id)
+    bill.isactive = False
+    bill.save()
+    try:
+         visa = mod.Visa.objects.get(bill = bill)
+         visa.delete()
+    except:
+        return redirect('/billlisting')
+    return redirect('/allbilllisting')
+
 # bill send for register
 @login_required(login_url='/')
 def sendBill(request, bill_id):
@@ -967,16 +979,18 @@ def billListing(request):
         mymoney = request.POST.get('money_txt')
         if Obilltype == '0' :
             if mymoney == '0':
-                records = mod.Bill.objects.filter(visatype=None, cr=True)
+                records = mod.Bill.objects.filter(visatype=None, cr=True, isactive = True).order_by('-id')
             else:
-                records = mod.Bill.objects.filter(visatype = None,money = mymoney,cr= True)
+                records = mod.Bill.objects.filter(visatype = None,money = mymoney,cr= True, isactive = True).order_by('-id')
+        elif Obilltype == '-1':
+            records = mod.Bill.objects.filter(isactive = False,visatype = None)
         else:
             if mymoney == '0':
-                records = mod.Bill.objects.filter(visatype=None,othertype = Obilltype, cr=True)
+                records = mod.Bill.objects.filter(visatype=None,othertype = Obilltype, cr=True, isactive = True).order_by('-id')
             else:
-                records = mod.Bill.objects.filter(visatype=None,othertype = Obilltype,money = mymoney, cr=True)
+                records = mod.Bill.objects.filter(visatype=None,othertype = Obilltype,money = mymoney, cr=True, isactive = True).order_by('-id')
     else:
-       records = mod.Bill.objects.filter(visatype=None, cr=True).order_by('-id')
+       records = mod.Bill.objects.filter(visatype=None, cr=True, isactive = True).order_by('-id')
     for record in records:
         reco = {}
         reco['zero'] = record.id
@@ -987,6 +1001,7 @@ def billListing(request):
         remaining_amount = record.price - record.payed
         reco['five'] = remaining_amount
         reco['money'] = record.money.money_type
+        reco['cancel'] = record.isactive
         myrecords.append(reco)
         totalprice += moneychange(record.price,record.money,'افغانی')
         totalpayed += moneychange(record.payed,record.money,'افغانی')
@@ -1012,6 +1027,88 @@ def billListing(request):
     context['billlisting'] = ' text-warning sub-bg ps-3'
     return render(request, 'billing/billlisting.html', context)
 
+
+def allbillListing(request):
+    context = {}
+    myrecords = []
+    totalprice = 0
+    totalpayed = 0
+    totalremain = 0
+    totalmafad = 0
+    context['Obilltype'] = mod.otherbill.objects.all()
+    context['visatype'] = mod.VisaType.objects.all()
+    context['money'] = mod.Money.objects.all()
+    if request.method == 'POST':
+        Obilltype = request.POST.get('Obilltype_txt')
+        mymoney = request.POST.get('money_txt')
+        if Obilltype == '0' :
+            if mymoney == '0':
+                records = mod.Bill.objects.filter(cr=True, isactive = True).order_by('-id')
+                
+            else:
+                records = mod.Bill.objects.filter(money = mymoney,cr= True ,isactive = True).order_by('-id')
+        elif Obilltype == '-1':
+            records = mod.Bill.objects.filter(isactive = False)
+        else:
+            if mymoney == '0':
+                if 'a' in Obilltype:
+                    Obilltype = Obilltype[0]
+                    records = mod.Bill.objects.filter(othertype = None,visatype = Obilltype,cr = True ,isactive = True).order_by('-id')
+                else:
+                    Obilltype = Obilltype[0]
+                    records = mod.Bill.objects.filter(visatype=None,othertype = Obilltype, cr=True ,isactive = True).order_by('-id')
+                
+            else:
+                try:
+                    records = mod.Bill.objects.filter(visatype=None,othertype = Obilltype,money = mymoney, cr=True ,isactive = True).order_by('-id')
+                except:
+                    records = mod.Bill.objects.filter(visatype=Obilltype,othertype = None,money = mymoney, cr=True ,isactive = True).order_by('-id')
+
+    else:
+        
+       records = mod.Bill.objects.filter(cr=True ,isactive = True).order_by('-id')
+    for record in records:
+        reco = {}
+        reco['zero'] = record.id
+        reco['one'] = record.name
+        if record.visatype == None:
+            reco['two'] = record.othertype.title
+        else:
+            reco['two'] = record.visatype.type +' '+ record.visatype.country
+        reco['three'] = record.price
+        reco['four'] = record.payed
+        remaining_amount = record.price - record.payed
+        reco['five'] = remaining_amount
+        reco['money'] = record.money.money_type
+        reco['cancel'] = record.isactive
+        myrecords.append(reco)
+        totalprice += moneychange(record.price,record.money,'افغانی')
+        totalpayed += moneychange(record.payed,record.money,'افغانی')
+        totalremain += moneychange(remaining_amount,record.money,'افغانی')
+        mafad  = record.payed - record.mainprice
+        totalmafad += moneychange(mafad,record.money,'افغانی')
+    context['records'] = myrecords
+    context["totalprice"] = totalprice
+    context['totalpayed'] = totalpayed
+    context['totalremain'] = totalremain
+    if totalmafad < 0:
+        context['mafadcolor'] = 'bg-danger'
+    else:
+        context['mafadcolor'] = 'bg-warning'
+    context['totalmafad'] = totalmafad
+    context["totalpriceper"] = 100 
+    if totalprice > 0:
+        context['totalpayedper'] = round( totalpayed * 100 / totalprice,2)
+        context['totalremainper'] = round(totalremain * 100 / totalprice,2)
+        context['totalmafadper'] = abs(round(totalmafad * 100 / totalprice,2))
+    
+    context['page'] = 'لیست همه بل ها'
+    context['billlisting'] = ' text-warning sub-bg ps-3'
+    return render(request, 'billing/allbilllisting.html', context)
+
+def billrecycle(request):
+    if request.method == 'POST':
+        pass
 
 def totalstatistics(request):
     context = {}

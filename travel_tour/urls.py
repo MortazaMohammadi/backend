@@ -5,7 +5,7 @@ from .views import *
 urlpatterns =[
 
     path('', loginPage, name='loginPage'),
-     path('logout' , logout_user),
+    path('logout' , logout_user),
     path('addPayment', addPayment, name='addPayment'),
     path('paymentList', paymentList, name='paymentList'),
     path('paymentUpdate<int:pay_id>/', paymentUpdate, name='paymentUpdate'),
@@ -33,8 +33,9 @@ urlpatterns =[
     path('cvTrue/<int:bill_id>/', cvTrue, name='cvTrue'),
     path('saveBill/<int:bill_id>/',saveBill,name='saveBill'),
     path("billListing", billListing, name="billListing"),
-    path('totalstatistics', totalstatistics, name = 'totalstatistics')
-
+    path('totalstatistics', totalstatistics, name = 'totalstatistics'),
+    path('allbilllisting',allbillListing, name = 'allbillListing'),
+    path('deactiveBill/<int:bill_id>/', deactiveBill, name = 'deactiveBill')
     # path('', home_page),
 
  

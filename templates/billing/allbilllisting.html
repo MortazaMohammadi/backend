@@ -6,7 +6,7 @@
     <div class="text-center">
         <div class="list sub-bg" id="list">
             <div class="title_bar fw-bold fs-2 mt-5 text-light text-center">
-                لیست بل ها ثبت شده
+                لیست همه بل ها ثبت شده
             </div>
             <div class="search_filter main-bg p-4">
               <form action="" name="listSearchform" method="post">
@@ -16,10 +16,16 @@
                   <div class="col-lg-3 col-md-3 col-12">
                     <select class="form-select" name="Obilltype_txt"  id="emp" aria-label="Default select example">
                       <option value="0">همه انواع بل</option>
-                      {% for i in Obilltype %}
-                      <option value="{{i.id}}">{{i.title}}</option>
+                      
+                      {% for i in visatype %}
+                      <option value="{{i.id}}a">{{i.type}} {{i.country}}</option>
+                      {% endfor %}
+
+                      {% for k in Obilltype %}
+                      <option value="{{k.id}}b">{{k.title}}</option>
                       {% endfor %}
                       <option value="-1" class="text-danger">بل های رد شده</option>
+                      
                     </select>
                   </div>    
                   <div class="col-lg-3 col-md-3 col-12">
@@ -34,10 +40,10 @@
                     <button type="submit" class="btn btn-info sub-bg text-light w-100"><i class="fa fa-search px-2" aria-hidden="true"></i>
                       جستجو</button>
                   </div>
-                    
+                  
                   <div class="col-lg-3 col-md-3 col-12">
-                    <a href = 'allbilllisting' class="btn btn-outline-info sub-bg text-light w-100 fw-bold"><i class="fa fa-list px-2" aria-hidden="true"></i>
-                      همه بل ها</a>
+                    <a href = 'billListing' class="btn btn-outline-info sub-bg text-light w-100 fw-bold"><i class="fa fa-list px-2" aria-hidden="true"></i>
+                       بل های غیر ویزا</a>
                   </div>
                 </div>
               </form>
@@ -71,11 +77,22 @@
                     <td><a href="billprint/{{items.zero}}" onclick="printPdf('billprint/{{items.zero}}'); return false;" class="btn btn-info w-100">یرنت</a></td>
                     <td><a href="updateBill/{{items.zero}}" class="btn btn-primary w-100">ویرایش</a></td>
 
-                    <td> <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal"
-                        data-bs-target="#confirmationModal-{{ items.zero }}">
-                        رد
-                    </button>
-                    </td>
+                   
+                   {% if items.cancel == True %}
+                   <td> <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal"
+                    data-bs-target="#confirmationModal-{{ items.zero }}">
+                    رد
+                   </button>
+                   </td>
+                   {% else %}
+                   <td> <button type="button" class="btn btn-danger w-100" disabled data-bs-toggle="modal"
+                    data-bs-target="#confirmationModal-{{ items.zero }}">
+                    رد
+                   </button>
+                   </td>
+
+                   {% endif %}
+                    
                   </tr> 
                    <!-- Confirmation Modal -->
                    <div class="modal fade" id="confirmationModal-{{ items.zero }}" tabindex="-1"

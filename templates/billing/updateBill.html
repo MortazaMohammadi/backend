@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
                         <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>  اسناد دریافتی</p>
-                        <input type="text" class="form-control" name="reciveddoc_txt" value = {{bill.reciveddoc}} required> 
+                        <input type="text" class="form-control" name="reciveddoc_txt" value = "{{ bill.reciveddoc }}" required> 
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5">
                         <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>نوعیت ویزا</p>
@@ -41,7 +41,7 @@
 
                     <div class="col-lg-4 col-md-6 col-sm-12 p-2 fs-5"> 
                         <p class="text-dark m-1"><i class="fa fa-dollar text-danger px-2" aria-hidden="true"></i>  تعداد اشخاص </p>
-                        <input type="number" class="form-control" name="people_txt" value="1" required>
+                        <input type="number" class="form-control" name="people_txt" value="{{bill.peopleNo}}" required>
                     </div>
                     
                     
