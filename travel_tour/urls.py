@@ -35,7 +35,8 @@ urlpatterns =[
     path("billListing", billListing, name="billListing"),
     path('totalstatistics', totalstatistics, name = 'totalstatistics'),
     path('allbilllisting',allbillListing, name = 'allbillListing'),
-    path('deactiveBill/<int:bill_id>/', deactiveBill, name = 'deactiveBill')
+    path('deactiveBill/<int:bill_id>/', deactiveBill, name = 'deactiveBill'),
+    path('isprint/<int:bill_id>/', isprint, name = 'isprint')
     # path('', home_page),
 
  

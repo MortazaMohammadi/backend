@@ -126,6 +126,7 @@ class Bill(models.Model):
     peopleNo = models.IntegerField(default = 1)
     phone = models.CharField(default='07....', max_length=15)
     isactive = models.BooleanField(default=True)
+    isprint = models.BooleanField(default = False)
     def __str__(self):
         return str(self.name) + str(self.peopleNo)
 

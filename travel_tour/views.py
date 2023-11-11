@@ -191,7 +191,8 @@ def cvTrue(request,bill_id):
     bill = mod.Bill.objects.get(id = bill_id)
     bill.cv = True
     bill.save()
-    return redirect('/billCustomer/')
+    referer = request.META.get('HTTP_REFERER')
+    return redirect(referer)
 
 
 def billVisa(request):
@@ -959,9 +960,10 @@ def moneyUpdate(request):
         record.amount = amount
         record.sell_amount = sell
         record.save()
-
+        
+        referer = request.META.get('HTTP_REFERER')
         # Redirect the user or render a success template
-        return redirect('/bill')  # Assuming you have a success URL name
+        return redirect(referer)  # Assuming you have a success URL name
 
 def billListing(request):
     context = {}
@@ -1002,6 +1004,7 @@ def billListing(request):
         reco['five'] = remaining_amount
         reco['money'] = record.money.money_type
         reco['cancel'] = record.isactive
+        reco['isprint'] = record.isprint
         myrecords.append(reco)
         totalprice += moneychange(record.price,record.money,'افغانی')
         totalpayed += moneychange(record.payed,record.money,'افغانی')
@@ -1028,6 +1031,12 @@ def billListing(request):
     return render(request, 'billing/billlisting.html', context)
 
 
+def isprint(request,bill_id):
+    bill = mod.Bill.objects.get(id = bill_id)
+    bill.isprint = True
+    bill.save()
+    referer = request.META.get('HTTP_REFERER')
+    return redirect(referer)
 def allbillListing(request):
     context = {}
     myrecords = []
@@ -1081,6 +1090,7 @@ def allbillListing(request):
         reco['five'] = remaining_amount
         reco['money'] = record.money.money_type
         reco['cancel'] = record.isactive
+        reco['isprint'] = record.isprint
         myrecords.append(reco)
         totalprice += moneychange(record.price,record.money,'افغانی')
         totalpayed += moneychange(record.payed,record.money,'افغانی')

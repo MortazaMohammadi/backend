@@ -85,6 +85,7 @@
                     <th scope="col"> ثبت بل</th>
                     <th scope="col">ثبت ویزا</th>
                     <th scope="col">حذف</th>
+                    <th scope="col">چاپ</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -108,6 +109,15 @@
                         حذف
                     </button>
                     </td>
+                    
+                   {% if items.isprint  == False %}
+                   <td><a href="/isprint/{{items.id}}">
+                     <i class="fa fa-check-circle text-danger" aria-hidden="true"></i>
+                   </a></td>
+                  {% else %}
+                   <td><i class="fa fa-check-circle text-success" aria-hidden="true"></i></td>
+                  {% endif %}
+                 
                   </tr> 
                    <!-- Confirmation Modal -->
                    <div class="modal fade" id="confirmationModal-{{ items.id }}" tabindex="-1"
