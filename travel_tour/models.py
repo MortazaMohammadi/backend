@@ -184,3 +184,14 @@ class BCV(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null= True)
     visa = models.ForeignKey(Visa, on_delete=models.CASCADE, null= True) 
     
+class qararrdad(models.Model):
+    name = models.CharField(max_length=50)
+    fname = models.CharField(max_length=20)
+    passport = models.CharField(max_length=20)
+    price = models.FloatField(default='0')
+    phone = models.CharField(max_length='12')
+    date = models.DateField(auto_now=True)
+    payed = models.FloatField(default=0)
+    active = models.BooleanField(default=True)
+    def __str__(self) -> str:
+        return str(self.name)

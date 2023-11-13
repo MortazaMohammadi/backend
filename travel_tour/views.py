@@ -155,10 +155,78 @@ def customerRegister(request, bill_id,passport_id):
     money = mod.Money.objects.all()
     return render(request, 'visa/customerRegister.html', {'page': 'راجستر مشتری','cusregister':' text-warning sub-bg ps-3','money' : money,'bill':bill,'passport':passport_id})
 
+# ------------------==========================================================================================
+def qararrdad(request):
+    context = {}
+    if request.method == 'POST':
+        name = request.POST.get('name_txt')
+        fname = request.POST.get('fname_txt')
+        passport = request.POST.get('passport_txt')
+        price = request.POST.get('price_txt')
+        phone = request.POST.get('phone_txt')
+        payed = request.POST.get('payed_txt')
+        qararr = mod.qararrdad(
+            name = name,
+            fname = fname,
+            passport = passport,
+            price = price,
+            phone = phone,
+            payed = payed
+        )
+        qararr.save()
+    context['page'] = 'اضافه قرار داد خط'
+    context['qararrdad'] = 'sub-bg text-warning'
+    return render(request, '/visa/qararrdad.html',context)
+
+def updateqararrdad(request,qararr_id):
+    context = {}
+    if request.method == 'POST':
+        name = request.POST.get('name_txt')
+        fname = request.POST.get('fname_txt')
+        passport = request.POST.get('passport_txt')
+        price = request.POST.get('price_txt')
+        phone = request.POST.get('phone_txt')
+        payed = request.POST.get('payed_txt')
+        qararr = mod.qararrdad.objects.get(id = qararr_id)
+        qararr.name = name
+        qararr.fname = fname
+        qararr.passport = passport
+        qararr.price = price
+        qararr.phone = phone
+        qararr.payed = payed
+        qararr.save()
+        referer = request.META.get('HTTP_REFERER')
+        return redirect(referer)
+    context['page'] = 'اضافه قرار داد خط'
+    context['qararrdad'] = 'sub-bg text-warning'
+    return render(request, '/visa/qararrdad.html',context)
+
+def deleteqararrdad(request,qararr_id):
+    qararr = mod.qararrdad.objects.get(id = qararr_id)
+    qararr.delete()
+    referer = request.META.get('HTTP_REFERER')
+    return redirect(referer)
+
+def deactiveqararrdad(request,qararr_id):
+    qararrdad = mod.qararrdad.objects.get(id - qararr_id)
+    qararrdad.active = False
+    qararrdad.save()
+    referer = request.META.get('HTTP_REFERER')
+    return redirect(referer)
+
+def listqararrdad(request):
+    context = {}
+    if request.method == 'POST':
+        passport = request.POST.get('passport_txt')
+        qararrs = mod.qararrdad.objects.get(passport = passport)
+    else:
+        qararrs = mod.qararrdad.objects.all()
+    context['records'] = qararrs
+    return render(request, '/visa/listqararr.html', context)
+# ----------------------===========================================================================
 
 def billCustomer(request):
     context = {}
-    
     bill = mod.Bill.objects.filter(isdone = True, cv = False)
     context['bill'] = bill
     context['page'] = 'راجستر مشتری'
@@ -373,9 +441,11 @@ def deactiveBill(request, bill_id):
     try:
          visa = mod.Visa.objects.get(bill = bill)
          visa.delete()
+         referer = request.META.get('HTTP_REFERER')
     except:
-        return redirect('/billlisting')
-    return redirect('/allbilllisting')
+        referer = request.META.get('HTTP_REFERER')
+        return redirect(referer)
+    return redirect(referer)
 
 # bill send for register
 @login_required(login_url='/')
