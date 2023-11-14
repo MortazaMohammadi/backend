@@ -42,7 +42,8 @@ urlpatterns =[
     path('deleteqararrdad/<int:qararr_id>/',deleteqararrdad,name='deleteqararrdad'),
     path('listqararrdad/<int:active>/',listqararrdad,name='listqararrdad'),
     path('deactiveqararrdad/<int:qararr_id>/', deactiveqararrdad, name='deactiveqararrdad'),
-    path('doneqararrdad/<int:qararr_id>/', doneqararrdad, name='doneqararrdad')
+    path('doneqararrdad/<int:qararr_id>/', doneqararrdad, name='doneqararrdad'),
+    path('printqararrdad/<int:qararr_id>/', printqararrdad, name='printqararrdad'),
     # path('', home_page),
 
  

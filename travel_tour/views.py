@@ -165,18 +165,22 @@ def qararrdad(request):
         price = request.POST.get('price_txt')
         phone = request.POST.get('phone_txt')
         payed = request.POST.get('payed_txt')
+        type = request.POST.get('type_txt')
+        dbtype = mod.qararrtype.objects.get(id = type)
         qararr = mod.qararrdad(
             name = name,
             fname = fname,
-            passport = passport,
+            passport = passport.upper(),
             price = price,
             phone = phone,
-            payed = payed
+            payed = payed,
+            type = dbtype
         )
         qararr.save()
     context['page'] = 'اضافه قرار داد خط'
     context['qararrdad'] = 'sub-bg text-warning'
     context['list'] = mod.qararrdad.objects.order_by('-id')
+    context['type'] = mod.qararrtype.objects.all()
     return render(request, 'qararr/qararrdad.html',context)
 
 def updateqararrdad(request,qararr_id):
@@ -188,19 +192,23 @@ def updateqararrdad(request,qararr_id):
         price = request.POST.get('price_txt')
         phone = request.POST.get('phone_txt')
         payed = request.POST.get('payed_txt')
+        type = request.POST.get('type_txt')
+        dbtype = mod.qararrtype.objects.get(id = type)
         qararr = mod.qararrdad.objects.get(id = qararr_id)
         qararr.name = name
         qararr.fname = fname
-        qararr.passport = passport
+        qararr.passport = passport.upper()
         qararr.price = price
         qararr.phone = phone
         qararr.payed = payed
+        qararr.type = dbtype
         qararr.save()
         referer = request.META.get('HTTP_REFERER')
         return redirect(referer)
     context['page'] = 'اضافه قرار داد خط'
     context['qararrdad'] = 'sub-bg text-warning'
     context['records'] = mod.qararrdad.objects.get(id = qararr_id)
+    context['type'] = mod.qararrtype.objects.all()
     return render(request, 'qararr/updateqararrdad.html',context)
 
 def deleteqararrdad(request,qararr_id):
@@ -240,7 +248,15 @@ def listqararrdad(request,active):
             context['one'] = 'bg-warning'
             qararrs = mod.qararrdad.objects.filter(done = False,active= True).order_by('-id')
     context['list'] = qararrs
+    context['page'] = 'لیست قرارداد ها'
+    context['qararrdad'] = 'sub-bg text-warning'
     return render(request, 'qararr/listqararrdad.html', context)
+
+def printqararrdad(request,qararr_id):
+    qararr = mod.qararrdad.objects.get(id = qararr_id)
+    return render(request, 'qararr/printqararrdad.html', {'qararr': qararr})
+
+    
 # ----------------------===========================================================================
 
 def billCustomer(request):

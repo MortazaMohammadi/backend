@@ -183,7 +183,9 @@ class BCV(models.Model):
     bill = models.ForeignKey(Bill, on_delete=models.CASCADE, null= True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null= True)
     visa = models.ForeignKey(Visa, on_delete=models.CASCADE, null= True) 
-    
+
+class qararrtype(models.Model):
+    title = models.CharField(max_length=50)    
 class qararrdad(models.Model):
     name = models.CharField(max_length=50)
     fname = models.CharField(max_length=20)
@@ -192,6 +194,7 @@ class qararrdad(models.Model):
     phone = models.CharField(max_length=12)
     date = models.DateField(auto_now=True)
     payed = models.FloatField(default=0)
+    type = models.ForeignKey(qararrtype, on_delete=models.DO_NOTHING)
     active = models.BooleanField(default=True)
     done = models.BooleanField(default=False)
     def __str__(self) -> str:

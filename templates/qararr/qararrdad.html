@@ -22,6 +22,14 @@
                             <input type="text" name="fname_txt" class="form-control">
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-edit text-danger px-2" aria-hidden="true"></i>نوعیت قرار داد</p>
+                            <select class="form-select" aria-label="Default select example" name="type_txt">
+                                {% for item in type %}
+                                <option class="" value="{{ item.id }}">{{ item.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
                             <p class="text-dark m-1"><i class="fa fa-paperclip text-danger px-2" aria-hidden="true"></i>نمبر پاسپورت</p>
                             <input type='text' name="passport_txt" class="form-control">
                         </div>
@@ -69,7 +77,7 @@
                  <tr>
                     <th scope="row">{{ items.id }}</th>
                     <td>{{ items.name }}</td>
-                    <td>{{ items.passport }}</td>
+                    <td>{{ items.type.title }}</td>
                     <td>{{ items.phone }}</td>
                     <td> {{ items.date }} </td>
                     <td> <a href="/updateqararrdad/{{items.id}}" class="btn btn-warning w-100">ویرایش</a> </td>
