@@ -1,0 +1,92 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="body p-5 mt-3">
+    <div class="text-center">
+        <div class="list sub-bg">
+      
+            <div class="title_bar fw-bold fs-2 sub-bg text-white">
+                لیست همه قرارداد خط ها
+                <div class="row pt-2">
+                    <div class="col {{one}}">
+                             <a class="nav-link text-dark fs-6 border border-1 border-dark" href="/listqararrdad/1">لیست همه قرار داد ها</a>
+                    </div>
+                    <div class="col {{two}}">
+                             <a class="nav-link text-dark fs-6 border border-1 border-dark" href="/listqararrdad/2">نسخ شده ها</a>
+                    </div>
+                    
+                    <div class="col {{three}}">
+                        <a class="nav-link text-dark fs-6 border border-1 border-dark" href="/listqararrdad/3">تکمیل شده ها</a>
+                    </div>
+                </div>
+            </div>
+            <div class="search_filter main-bg p-4">
+                <form action="" method="post">
+                  {% csrf_token %}
+                  <div class="row m-0">
+                    <div class="col-lg-5 col-md-3 col-12">
+                      <input type="text" placeholder="نمبر پاسپورت" name="passport_txt" class="form-control" id="" required>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-12">
+                      <button type="submit" class="btn btn-info sub-bg text-light w-100"><i class="fa fa-search px-2" aria-hidden="true"></i>
+                        جستجو</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+    
+      <table class="table table-light">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">نام</th>
+            <th scope="col">پاسپورت</th>
+            <th scope="col">شماره تماس</th>
+            <th scope="col">تاریخ</th>
+            <th scope="col">ویرایش</th>
+            {% if one != None %}
+            <th scope="col">نسخ</th>
+            <th scope="col">تکمیل</th>
+            <th scope="col">حذف</th>
+            {% endif %}
+            <th>چاپ</th>
+            <th>حالت</th>
+
+            
+          </tr>
+        </thead>
+        <tbody>
+         {% for items in list%}
+         <tr>
+            <th scope="row">{{ items.id }}</th>
+            <td>{{ items.name }}</td>
+            <td>{{ items.passport }}</td>
+            <td>{{ items.phone }}</td>
+            <td> {{ items.date }} </td>
+            <td> <a href="/updateqararrdad/{{items.id}}" class="btn btn-warning w-100">ویرایش</a> </td>
+            {% if items.active == False %}
+            <td><a href="printqararrdad/{{items.id}}" class="nav-link text-dark fs-5"><i class="fa fa-print"></i></a></td>
+            <td> <i class="fa fa-check-circle text-danger fs-5"></i></td>
+            {% elif items.done == True %}
+            <td><a href="printqararrdad/{{items.id}}" class="nav-link text-dark fs-5"><i class="fa fa-print"></i></a></td>
+            <td> <i class="fa fa-check-circle text-success fs-5"></i></td>
+            {% endif %}
+            {% if items.active == True and items.done == False %}
+            <td> <a href="/deactiveqararrdad/{{items.id}}" class="btn btn-danger w-100">نسخ</a> </td>
+            <td> <a href="/doneqararrdad/{{items.id}}" class="btn btn-danger w-100" >تکمیل</a> </td>
+            <td> <a href="/deleteqararrdad/{{items.id}}" class="btn btn-danger w-100">حذف</a> </td>
+            <td><a href="printqararrdad/{{items.id}}" class="nav-link text-dark fs-5"><i class="fa fa-print"></i></a></td>
+            <td> <i class="fa fa-check-circle text-secondary fs-5"></i></td>
+            {% endif %}
+            
+            
+        </tr>   
+
+         {% endfor %}
+        </tbody>
+      </table>
+</div>
+</div>
+</div>
+{% endblock %}

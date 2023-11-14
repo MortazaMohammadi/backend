@@ -36,7 +36,13 @@ urlpatterns =[
     path('totalstatistics', totalstatistics, name = 'totalstatistics'),
     path('allbilllisting',allbillListing, name = 'allbillListing'),
     path('deactiveBill/<int:bill_id>/', deactiveBill, name = 'deactiveBill'),
-    path('isprint/<int:bill_id>/', isprint, name = 'isprint')
+    path('isprint/<int:bill_id>/', isprint, name = 'isprint'),
+    path('qararrdad', qararrdad, name = 'qararrdad'),
+    path('updateqararrdad/<int:qararr_id>/',updateqararrdad,name = 'updateqararrdad'),
+    path('deleteqararrdad/<int:qararr_id>/',deleteqararrdad,name='deleteqararrdad'),
+    path('listqararrdad/<int:active>/',listqararrdad,name='listqararrdad'),
+    path('deactiveqararrdad/<int:qararr_id>/', deactiveqararrdad, name='deactiveqararrdad'),
+    path('doneqararrdad/<int:qararr_id>/', doneqararrdad, name='doneqararrdad')
     # path('', home_page),
 
  

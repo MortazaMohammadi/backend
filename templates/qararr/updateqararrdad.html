@@ -1,0 +1,54 @@
+
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="body p-5 mt-3">
+    <div class="text-center">
+
+        <div class="detial">
+            <div class="title_bar fw-bold fs-2 sub-bg text-white">
+                <p>ویرایش قرارداد خط</p>
+                <a href=""></a>
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div id="reg" class="row m-0 shadow mt-2 text-start p-2 p-3">
+                    <div class="row m-0 shadow bg-white-1 pt-5">
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-user" aria-hidden="true"></i> نام کامل</p>
+                            <input type="text" name="name_txt" value="{{records.name}}" class="form-control" required>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-user text-danger px-2" aria-hidden="true"></i> نام پدر</p>
+                            <input type="text" name="fname_txt" class="form-control" value="{{records.fname}}" required>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-paperclip text-danger px-2" aria-hidden="true"></i>نمبر پاسپورت</p>
+                            <input type='text' name="passport_txt" class="form-control" value="{{records.passport}}" required>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> قیمت ویزا</p>
+                            <input type="number" name="price_txt" class="form-control" value="{{records.price}}" required>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-money text-danger px-2" aria-hidden="true"></i> پیش پرداخت</p>
+                            <input type="number" class="form-control" name="payed_txt" value="{{records.payed}}" required>
+                        </div>
+
+                       
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-phone" aria-hidden="true"></i> شماره تماس</p>
+                            <input type="number" name="phone_txt" class="form-control" value="{{records.phone}}" required>
+                        </div>
+         
+                        <div class="col-12 p-2 fs-5 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-info w-50 my-5 fw-bold">ذخیره</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

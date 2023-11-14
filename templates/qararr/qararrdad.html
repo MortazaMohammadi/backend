@@ -1,0 +1,85 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="body p-5 mt-3">
+    <div class="text-center">
+
+        <div class="detial">
+            <div class="title_bar fw-bold fs-2 sub-bg text-white">
+                راجستر قرارداد خط
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div id="reg" class="row m-0 shadow mt-2 text-start p-2 p-3">
+                    <div class="row m-0 shadow bg-white-1 pt-5">
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-user" aria-hidden="true"></i> نام کامل</p>
+                            <input type="text" name="name_txt" class="form-control">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-user text-danger px-2" aria-hidden="true"></i> نام پدر</p>
+                            <input type="text" name="fname_txt" class="form-control">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-paperclip text-danger px-2" aria-hidden="true"></i>نمبر پاسپورت</p>
+                            <input type='text' name="passport_txt" class="form-control">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-dollar" aria-hidden="true"></i> قیمت ویزا</p>
+                            <input type="number" name="price_txt" class="form-control"  required>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa fa-money text-danger px-2" aria-hidden="true"></i> پیش پرداخت</p>
+                            <input type="number" class="form-control" name="payed_txt" required>
+                        </div>
+
+                       
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-2 fs-5">
+                            <p class="text-dark m-1"><i class="fa text-danger px-2 fa-phone" aria-hidden="true"></i> شماره تماس</p>
+                            <input type="text" name="phone_txt" class="form-control" required>
+                        </div>
+         
+                        <div class="col-12 p-2 fs-5 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-info w-50 my-5 fw-bold">ذخیره</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="list sub-bg">
+            <div class="title_bar fw-bold fs-2 mt-5 text-light">
+                <p>لیست قرارداد خط  ها </p>
+                <a class="nav-link text-dark fs-6 border border-1 border-dark" href="/listqararrdad/1">لیست همه قرار داد ها</a>
+            </div>
+              <table class="table table-light">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">نام</th>
+                    <th scope="col">پاسپورت</th>
+                    <th scope="col">شماره تماس</th>
+                    <th scope="col">تاریخ</th>
+                    <th scope="col">ویرایش</th>
+                    <th scope="col">حذف</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 {% for items in list%}
+                 <tr>
+                    <th scope="row">{{ items.id }}</th>
+                    <td>{{ items.name }}</td>
+                    <td>{{ items.passport }}</td>
+                    <td>{{ items.phone }}</td>
+                    <td> {{ items.date }} </td>
+                    <td> <a href="/updateqararrdad/{{items.id}}" class="btn btn-warning w-100">ویرایش</a> </td>
+                    <td> <a href="/deleteqararrdad/{{items.id}}" class="btn btn-danger w-100">حذف</a> </td>
+                </tr>   
+
+                 {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

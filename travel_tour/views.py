@@ -176,7 +176,8 @@ def qararrdad(request):
         qararr.save()
     context['page'] = 'اضافه قرار داد خط'
     context['qararrdad'] = 'sub-bg text-warning'
-    return render(request, '/visa/qararrdad.html',context)
+    context['list'] = mod.qararrdad.objects.order_by('-id')
+    return render(request, 'qararr/qararrdad.html',context)
 
 def updateqararrdad(request,qararr_id):
     context = {}
@@ -199,7 +200,8 @@ def updateqararrdad(request,qararr_id):
         return redirect(referer)
     context['page'] = 'اضافه قرار داد خط'
     context['qararrdad'] = 'sub-bg text-warning'
-    return render(request, '/visa/qararrdad.html',context)
+    context['records'] = mod.qararrdad.objects.get(id = qararr_id)
+    return render(request, 'qararr/updateqararrdad.html',context)
 
 def deleteqararrdad(request,qararr_id):
     qararr = mod.qararrdad.objects.get(id = qararr_id)
@@ -208,21 +210,37 @@ def deleteqararrdad(request,qararr_id):
     return redirect(referer)
 
 def deactiveqararrdad(request,qararr_id):
-    qararrdad = mod.qararrdad.objects.get(id - qararr_id)
+    qararrdad = mod.qararrdad.objects.get(id = qararr_id)
     qararrdad.active = False
     qararrdad.save()
     referer = request.META.get('HTTP_REFERER')
     return redirect(referer)
 
-def listqararrdad(request):
+
+def doneqararrdad(request,qararr_id):
+    qararrdad = mod.qararrdad.objects.get(id = qararr_id)
+    qararrdad.done = True
+    qararrdad.save()
+    referer = request.META.get('HTTP_REFERER')
+    return redirect(referer)
+
+def listqararrdad(request,active):
     context = {}
     if request.method == 'POST':
         passport = request.POST.get('passport_txt')
-        qararrs = mod.qararrdad.objects.get(passport = passport)
+        qararrs = mod.qararrdad.objects.filter(passport = passport)
     else:
-        qararrs = mod.qararrdad.objects.all()
-    context['records'] = qararrs
-    return render(request, '/visa/listqararr.html', context)
+        if active == 3:
+            context['three'] = 'bg-warning'
+            qararrs = mod.qararrdad.objects.filter( done = True).order_by('-id')
+        elif active == 2:
+            context['two'] = 'bg-warning'
+            qararrs = mod.qararrdad.objects.filter(active = False).order_by('-id')
+        else:
+            context['one'] = 'bg-warning'
+            qararrs = mod.qararrdad.objects.filter(done = False,active= True).order_by('-id')
+    context['list'] = qararrs
+    return render(request, 'qararr/listqararrdad.html', context)
 # ----------------------===========================================================================
 
 def billCustomer(request):

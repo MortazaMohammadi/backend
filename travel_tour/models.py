@@ -189,9 +189,10 @@ class qararrdad(models.Model):
     fname = models.CharField(max_length=20)
     passport = models.CharField(max_length=20)
     price = models.FloatField(default='0')
-    phone = models.CharField(max_length='12')
+    phone = models.CharField(max_length=12)
     date = models.DateField(auto_now=True)
     payed = models.FloatField(default=0)
     active = models.BooleanField(default=True)
+    done = models.BooleanField(default=False)
     def __str__(self) -> str:
         return str(self.name)
