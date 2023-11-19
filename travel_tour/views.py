@@ -254,7 +254,8 @@ def listqararrdad(request,active):
 
 def printqararrdad(request,qararr_id):
     qararr = mod.qararrdad.objects.get(id = qararr_id)
-    return render(request, 'qararr/printqararrdad.html', {'qararr': qararr})
+    baqi = qararr.price - qararr.payed
+    return render(request, 'qararr/printqararrdad.html', {'qararr': qararr,'baqi':baqi})
 
     
 # ----------------------===========================================================================

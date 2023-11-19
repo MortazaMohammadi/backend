@@ -33,66 +33,76 @@
    <div class="row m-0 py-2 px-1 border border-dark border-1 no-print" id="print-button">
         <button onclick="window.print()">Print</button>
    </div>
-   <div class="row m-0 p-0 shadow print-content ">
+   <div class="row m-0 p-0 shadow print-content mb-1 pb-5" style="height: 95vh;">
     
     <div class="col-12 m-0  d-flex justify-content-center">
-        <img src="/static/img/qararr.jpg" class="" style="width: 150px; height: 150px;"  alt="">
+        <img src="/static/img/qararr.jpg" class="" style="width: 150px; height: 130px;"  alt="">
     </div>
     
     <p class="text-dark p-0  text-start fs-4 fw-bold text-center pb-4 p-2">قرار داد خط ویزه  و اقامه عمان</p>
     <p class="text-dark p-0  text-start fs-6 px-3 border-bottom ">تاریخ: {{qararr.date}}</p>
-   <p class="mt-2 fw-bold"style='color: rgb(100,90,80);'>
+   <p class="m-0 p-0 mb-2 mt-2 fw-bold"style='color: rgb(100,90,80);'>
     این قرارداد جهت اخذ ویزه و اقامه تجارتی عمان فی میان شرکت سیاحتی ستوده و محترم
    <span class="text-dark">{{qararr.name}}</span>
 ولد <span class="text-dark">{{qararr.fname}}</span>
 دارنده نمبر پاسپورت <span class="text-dark">{{qararr.passport}}</span> 
 به تاریخ <span class="text-dark">{{qararr.date}} </span> با شرایظ زیر منعقد است.     </p>
-<p class="fw-bold" style="color: rgb(100, 90, 80);">
+<p class="fw-bold m-0 p-0" style="color: rgb(100, 90, 80);">
   1. متقاضی ({{qararr.name}} ) مکلف است تا تمام اسناد مورد ضرورت برای اقامه عمان از قرار عکس،  و پاسپورت را به دفتر تسلیم نمایند.
 </p>
-<p class="fw-bold" style="color: rgb(100, 90, 80);">
-    2.	قیمت اقامه ( <span class="text-dark">{{qararr.price}}</span> ) دالر برای عبدالعزیز نذیر خان و سالم ترکمن و عبدالکریم  خاکسار وی میباشد.
+<p class="fw-bold p-0 m-0" style="color: rgb(100, 90, 80);">
+    2.	قیمت اقامه ( <span class="text-dark">{{qararr.price}}</span> ) دالر برای {{qararr.name }} میباشد.
 </p>
 {% if qararr.payed == 0 %}
-<p class="fw-bold" style="color: rgb(100, 90, 80);">
+<p class="fw-bold p-0 m-0" style="color: rgb(100, 90, 80);">
     3.	مشتری مکلف به پرداخت ( <span class="text-dark">{{qararr.payed}} </span> ) فیصد پول بطور پیش پرداخت به دفتر تسلیم نموده و بل رسید رسمی با مهر و امضاء اخذ نمایند و متباقی در صراف و یا نزد شخص سوم به امانت گذاشته میشود.
 </p>
 {% else %}
-<p class="fw-bold" style="color: rgb(100, 90, 80);">
+<p class="fw-bold p-0 m-0" style="color: rgb(100, 90, 80);">
     3.	مشتری مکلف به پرداخت ( <span class="text-dark">{{qararr.payed}} </span> ) دالر پول بطور پیش پرداخت به دفتر تسلیم نموده و بل رسید رسمی با مهر و امضاء اخذ نمایند و متباقی را بعد از آمدن ویزا به دفتر پرداخت نمایید.
 </p>
 {% endif %}
 
+<p class="fw-bold p-0 m-0" style="color: rgb(100, 90, 80);">
+  4. نوعیت ویزه و اقامه میدان پاس بوده متباقی پول (<span class="text-dark">{{baqi}} </span>) بعد از آمدن ویزه به طور کامل باید آزاد شود.
+</p>
 
-<p class="fw-bold" style="color: rgb(100, 90, 80);">
+<p class="fw-bold p-0 m-0" style="color: rgb(100, 90, 80);">
     5.	معیاد قرارداد ۴۵ روز کاری میباشد در صورتیکه در معیاد معینه نتیجه مطلوب بدست نیاید طرفین میتوانند با تفاهم و توافق همدیگر قرارداد را فسخ و شرکت مکلف است حین درخواست متقاضی پول که نزد ضامن گذاشته شده را آزاد نموده و پول پیشکی را مسترد نماید.
 
 </p>
-<p class="fw-bold" style="color: rgb(100, 90, 80);">
+<p class="fw-bold m-0 p-0" style="color: rgb(100, 90, 80);">
     6.	مسولیت دفتر اخذ ویزه و اقامه تجارتی با مسولیت محدود و تکت هوایی میباشد ، مکان بود و باش و غیره شامل قیمت توافقی نمیشود.
 
 </p>
-<p class="fw-bold" style="color: rgb(100, 90, 80);">
+<p class="fw-bold m-0 p-0" style="color: rgb(100, 90, 80);">
     7.	در صورتیکه متقاضی بنابر دلایل ویزه و اقامه از میدان هوایی کابل یا مقصد برگشت داده شود مسولیت بدوش دفتر بوده اما در صورت برگشت به دلایل پاسپورت ، تذکره تابعیت و یا هم بدلیل تحت پیگرد قانون محاکم بین المللی ( انترپول) و یا هم به دلایل صحی مسولیت آن به مشتری راجع میگردد و دفتر در مقابل آن هیچ نوع مسولیت ندارد و پول واپس نمیشود.
  </p>
-<p class="fw-bold" style="color: rgb(100, 90, 80);">
+<p class="fw-bold m-0 p-0" style="color: rgb(100, 90, 80);">
     8.	در صورتیکه در جریان پروسس مشتری منصرف میشود مشتری مکلف است تا مقدار پول مصرف شده جهت پیشبرد کار ایشان را پرداخت کند.
    
 </p>
-<p class="fw-bold" style="color: rgb(100, 90, 80);">
+<p class="fw-bold m-0 p-0" style="color: rgb(100, 90, 80);">
     9.	مشتری مکلف است در مدت سه روز بعد از آمدن ویزه آماده سفر شود در غیر آن پول باید از نزد صراف 
     آزاد شود.
 </p>
-<div class="pb-5 mb-5">
+<div class="pb-5 mb-5 mt-3">
+  <p class="float-end px-5 text-center">ریس شرکت سیاحتی اکسلنت <br>
+    سمیر احمد شیرزاد</p>  
+
+    <p class="float-start text-center px-5">امضاء و شصت مشتری <br>
+    {{qararr.name}}</p>
+
     
-    <p class="float-end px-5">امضاء و شصت {{qararr.name}}</p>
-    <p class="float-start px-5">امضاء و مهر شرکت </p>
 </div>
 </div>
+<div class="pt-2">
+  
 <small><span class="text-dark ">آدرس: مرکز تجارتی داودزی منزل تحتانی دفتر  B3-315</span></small>
 <small dir="rtl"><span class="float-end">
      شماره تماس : 0789785320 
 </span></small>
+</div>
 
 {% include 'shared/_FooterReferences.html' %}
 {% endblock %}

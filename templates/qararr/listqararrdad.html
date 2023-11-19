@@ -13,7 +13,7 @@
                              <a class="nav-link text-dark fs-6 border border-1 border-dark" href="/listqararrdad/1">لیست همه قرار داد ها</a>
                     </div>
                     <div class="col {{two}}">
-                             <a class="nav-link text-dark fs-6 border border-1 border-dark" href="/listqararrdad/2">نسخ شده ها</a>
+                             <a class="nav-link text-dark fs-6 border border-1 border-dark" href="/listqararrdad/2">فسخ شده ها</a>
                     </div>
                     
                     <div class="col {{three}}">
@@ -46,7 +46,7 @@
             <th scope="col">تاریخ</th>
             <th scope="col">ویرایش</th>
             {% if one != None %}
-            <th scope="col">نسخ</th>
+            <th scope="col">فسخ</th>
             <th scope="col">تکمیل</th>
             <th scope="col">حذف</th>
             {% endif %}
@@ -73,7 +73,7 @@
             <td> <i class="fa fa-check-circle text-success fs-5"></i></td>
             {% endif %}
             {% if items.active == True and items.done == False %}
-            <td> <a href="/deactiveqararrdad/{{items.id}}" class="btn btn-danger w-100">نسخ</a> </td>
+            <td> <a href="/deactiveqararrdad/{{items.id}}" class="btn btn-danger w-100">فسخ</a> </td>
             <td> <a href="/doneqararrdad/{{items.id}}" class="btn btn-danger w-100" >تکمیل</a> </td>
             <td> <a href="/deleteqararrdad/{{items.id}}" class="btn btn-danger w-100">حذف</a> </td>
             <td><a href="/printqararrdad/{{items.id}}" class="nav-link text-dark fs-5"><i class="fa fa-print"></i></a></td>
