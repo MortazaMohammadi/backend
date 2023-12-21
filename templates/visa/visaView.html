@@ -11,7 +11,9 @@
             <div class="row m-0 mt-3 fs-5">
                 <div class="col-12 row">
                     <div class="col-lg-2 col-md-3 col-6 mt-4">
+                       <a href="{{visa.customer.profile.url}}" download>
                         <img src="{{visa.customer.profile.url}}" alt="" class="w-100 card">
+                       </a>
                     </div>
                     <div class="col-lg-5 col-md-5 col-sm-12 px-5">
                         <table class="table text-start mt-3">
@@ -116,6 +118,30 @@
                             <td class="fs-6 text-success">{{ visa.emailby}}</td>
                         </tr>
                         <tr>
+                            <td class=" fw-bold"> اسناد دیگر :</td>
+                            <td class=" fw-bold"> 
+                                {% if visa.Otherdocs %}
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="{{ visa.Otherdocs.url }}" target="_blank" class="nav-link text-danger">باز کردن</a>
+                                    </div>
+    
+                                    <div class="col">
+                                        <a href="{{ visa.Otherdocs.url }}" download class="nav-link text-danger">دانلود</a> 
+                                    </div>
+                                    <div class="col">
+                                        <a href="#" onclick="printPdf('{{ visa.Otherdocs.url }}'); return false;" class="nav-link text-danger">پرنت</a>
+                                    </div>
+                                </div>
+                                {% else %}
+                               
+                                <p class="text-info">وجود ندارد</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+
+                           
                             <td class=" fw-bold"> سند ویزا :</td>
                             <td>
                             {% if visa.visapdf %}
@@ -158,12 +184,17 @@
                
                 <div class="col-lg-7 col-md-6 col-12 pt-5">
                     {% if visa.customer.cardImage %}
+                   <a href="{{visa.customer.cardImage.url}}" download>
                     <img src="{{visa.customer.cardImage.url}}" alt="" class="w-100 card m-2">
+                   </a>
+                    
                     
                    {% endif %}
                     
                     
-                    <img src="{{visa.customer.passportImage.url}}" alt="" class="w-100 card m-2"> 
+                    <a href="{{visa.customer.passportImage.url}}" download>
+                        <img src="{{visa.customer.passportImage.url}}" alt="" class="w-100 card m-2"> 
+                    </a>
                 </div>
         </div>
     </div>

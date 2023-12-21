@@ -11,6 +11,7 @@ from django.db.models import Q
 from travel_tour.EmailBackEnd import EmailBackEnd
 from travel_tour import models as mod
 from django.db.models import Sum
+from datetime import datetime
 
 
 # Login user_account view
@@ -569,6 +570,7 @@ def customerList(request):
 def visaUpdate(request,visa_id):
     context = {}
     visa = mod.Visa.objects.get(id = visa_id)
+    thedate = visa.saveddate
     reciveddoc = mod.VisaRecivedDoc.objects.get(visa = visa)     
     visaPayment = mod.visaPayment.objects.get(visa = visa)
     
@@ -617,7 +619,8 @@ def visaUpdate(request,visa_id):
         # If a file is already associated, delete it before assigning the new file
                  visaPayment.blockImage.delete()
                  visaPayment.blockImage = blockImage
-        
+        visa.saveddate = thedate
+        print(thedate,'--',visa.saveddate)
         visa.save()
         reciveddoc.save()
         visaPayment.save()
@@ -660,6 +663,28 @@ def registerPayment(request,visa_id):
         iscomplate = request.POST.get('iscomplate_txt') 
         cuspay.payed = cupayed
         cuspay.save()
+      
+        if visa.Otherdocs == None:
+                try:
+                     Otherdocs = request.FILES['otherdocs_file']
+                except:
+                    Otherdocs = None
+                
+                visa.Otherdocs = Otherdocs
+               
+        else:
+                try:
+                     Otherdocs = request.FILES['otherdocs_file']
+                except:
+                    Otherdocs = None
+                if Otherdocs != None:
+                    visa.Otherdocs.delete()
+                    visa.Otherdocs = Otherdocs
+                else:
+                    pass
+        visa.saveddate = visa.saveddate
+        print(visa.Otherdocs)
+        visa.save()
         if registerPayment:
             registerPayment.visa = visa
             registerPayment.payed = payed
@@ -725,6 +750,8 @@ def registerPayment(request,visa_id):
                 pass
         else:
             visa.iscomplate = False
+       
+        
         visa.save()
         
         return redirect('/visaList')
@@ -753,13 +780,19 @@ def visaStatistic(request):
         if request.method == 'GET':
          Fvtype = request.GET.get('vtype_txt')
          moneytype = request.GET.get('money_txt')
+         month = request.GET.get('month_txt')
+         
          if moneytype:
             totype = mod.Money.objects.get(id = moneytype)
          else:
             totype = mod.Money.objects.get(id = 1)
+         if month:
+            month = datetime.strptime(month, '%Y-%m')
+         else:
+            month = datetime.now()
          if Fvtype:
            if Fvtype == '0':
-               visas = mod.Visa.objects.all()
+               visas = Visa.objects.filter(saveddate__year=month.year, saveddate__month=month.month)
                context['records'] = visaacountingList(visas)
                for i in context['records']:
                    
@@ -918,19 +951,19 @@ def visaacountingList(visas):
         record['visa_id'] = visa.id
         record['visa_customer'] = visa.customer
         record['visa_type'] = visa.visaType
-        record['visa_price'] = visa.price
+        record['visa_price'] = round(visa.price , 3)
         record['money_type'] = visa.money
-        record['cupay'] = cupay.payed
+        record['cupay'] = round(cupay.payed , 3)
 
 
         if ofpay:
-            record['ofpay'] = ofpay.payed
+            record['ofpay'] = round(ofpay.payed , 3)
 
         else:
             record['ofpay'] = 0.0
            
-        record['mafad'] = mafad(visa.price, record['ofpay'] , cupay.payed,visa.id)
-        record['remain'] = visa.price - cupay.payed
+        record['mafad'] = round(mafad(visa.price, record['ofpay'] , cupay.payed,visa.id) , 3)
+        record['remain'] = round(visa.price - cupay.payed , 3)
         
         records.append(record) 
     return records
