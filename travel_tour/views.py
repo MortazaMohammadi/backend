@@ -657,13 +657,14 @@ def registerPayment(request,visa_id):
     if request.method == 'POST':
         payed = request.POST.get('payed_txt')
         cupayed = request.POST.get('cupayed_txt')
-       
+        note = request.POST.get('note_txt')
         isapproved = request.POST.get('isapproved_txt')
         isrejected = request.POST.get('isrejected_txt')
         iscomplate = request.POST.get('iscomplate_txt') 
         cuspay.payed = cupayed
         cuspay.save()
-      
+        
+        visa.note = note
         if visa.Otherdocs == None:
                 try:
                      Otherdocs = request.FILES['otherdocs_file']
