@@ -145,6 +145,7 @@ class Visa(models.Model):
     price = models.FloatField()
     money = models.ForeignKey(Money, on_delete=models.CASCADE)
     bill = models.ForeignKey(Bill,on_delete=models.CASCADE,null=True)
+    note = models.CharField(max_length=50, default='درج نگردیده')
 
 
 class registerPayed(models.Model):
