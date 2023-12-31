@@ -793,14 +793,20 @@ def visaStatistic(request):
             month = datetime.now()
          if Fvtype:
            if Fvtype == '0':
-               visas = Visa.objects.filter(saveddate__year=month.year, saveddate__month=month.month)
+               start_date = datetime(month.year, month.month, 1)
+               end_date = start_date.replace(day=1, month=start_date.month + 1) if start_date.month != 12 else start_date.replace(year=start_date.year + 1, month=1)
+
+               visas = mod.Visa.objects.filter(Q(saveddate__gte=start_date) & Q(saveddate__lt=end_date)) 
+               
                context['records'] = visaacountingList(visas)
+               
                for i in context['records']:
                    
                    moneychange(i['visa_price'],i["money_type"],totype.money_type)
                    total_price +=  moneychange(i['visa_price'],i["money_type"],totype)
                    total_cupay += moneychange(i['cupay'],i["money_type"],totype)
                    total_ofpay +=  moneychange(i['ofpay'],i["money_type"],totype)
+                   
               
                context['total_ofpay'] = round(total_ofpay,3)
                context['total_cupay_pay'] = round(total_cupay,3)
@@ -955,6 +961,7 @@ def visaacountingList(visas):
         record['visa_price'] = round(visa.price , 3)
         record['money_type'] = visa.money
         record['cupay'] = round(cupay.payed , 3)
+      
 
 
         if ofpay:
