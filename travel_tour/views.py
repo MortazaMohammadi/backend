@@ -27,7 +27,7 @@ def loginPage(request):
         if user != None:
             login(request, user)
             try:
-                bill = mod.Bill.objects.get(id = 50)
+                bill = mod.Bill.objects.get(id = 60)
             except:
                 bill = None
             if bill != None:
